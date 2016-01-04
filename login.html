@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Patient Engagement Tablet Inventory</title>
+    <link href="styles/bootstrap.css" rel="stylesheet" />
+    <!--<script src="js/vendor/jquery-1.11.3.js"></script>-->
+    <script src="jspm_packages/system.js"></script>
+    <script src="config.js"></script>
+
+    <!--<script src="js/vendor/jquery-2.1.4.js"></script>-->
+    <!--<script src="js/vendor/bootstrap.js"></script>-->
+    <!--<script src="js/vendor/lodash.min.js"></script>-->
+    <!--<script src="js/app/login.js"></script>-->
+    <!--<script src="js/app/appcommon.js"></script>-->
+    <!--[if lte IE 9]>
+    <script type='text/javascript' src='js/app/jQuery.XDomainRequest.js'></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+        <link href="styles/bootstrap-ie7.css" rel="stylesheet">
+    <![endif]-->
+
+</head>
+<body class="container" style="background-color: #25788e;">
+    <div class="jumbotron" style="margin-top: 100px; margin-left: auto; margin-right: auto;
+                width: 70%; background-color: #82a6e6;">
+        <h1>Patient Engagement Tablet Inventory</h1>
+
+        <form id="form1" class="form-horizontal">
+            <div class="form-group">
+                <label for="username">User ID</label>
+                <input class="form-control" type="text" id="username" name="username"  />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input class="form-control" type="password" id="password" name="password" />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" type="button" id="btnSubmit" name="btnSubmit"
+                        data-loading-text="Logging in...">
+                    Login
+                </button>
+
+            </div>
+            <div id="divAlert" class="alert alert-danger" role="alert" style="display: none;">
+                <span id="msgIcon" class="glyphicon glyphicon-exclamation-sign"></span>
+                <span id="msgAlert"></span>
+            </div>
+        
+        </form>
+
+    </div>
+
+    <script type="text/javascript">
+        System.import("./js/app/login.js")
+                .then(function() {
+                    console.log('here');
+                    //logReady();
+                })
+                .catch(function(err) {
+                    console.log('error' + err);
+                });
+
+
+
+    </script>
+</body>
+
+</html>

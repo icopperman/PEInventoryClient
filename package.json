@@ -1,0 +1,29 @@
+{
+  "name": "peinventoryclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^2.1.4",
+    "lodash": "^3.10.1"
+  },
+  "devDependencies": {
+    "jquery": "^2.1.4",
+    "lodash": "^3.10.1"
+  },
+  "jspm": {
+    "dependencies": {
+      "bootstrap": "github:twbs/bootstrap@^3.3.6",
+      "jquery": "github:components/jquery@^2.1.4",
+      "lodash": "npm:lodash@^3.10.1"
+    },
+    "devDependencies": {
+      "typescript": "npm:typescript@^1.6.2"
+    }
+  }
+}

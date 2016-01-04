@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "target": "es5" ,
+    "module": "system",
+    "watch": false,
+    "sourceMap": true
+  },
+  "exclude": [
+    "node_modules", "jspm_packages"
+  ]
+
+}
