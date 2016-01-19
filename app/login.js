@@ -1,15 +1,14 @@
-System.register(['lodash', 'jquery', 'bootstrap/js/bootstrap.js', "./appcommon"], function(exports_1) {
-    var _, jquery_1, appcommon_1, appcommon_2, appcommon_3, appcommon_4;
+System.register(['lodash', 'jquery', "./appcommon"], function(exports_1) {
+    var _, $, appcommon_1, appcommon_2, appcommon_3, appcommon_4;
     var Login, x;
     return {
         setters:[
             function (_1) {
                 _ = _1;
             },
-            function (jquery_1_1) {
-                jquery_1 = jquery_1_1;
+            function ($_1) {
+                $ = $_1;
             },
-            function (_2) {},
             function (appcommon_1_1) {
                 appcommon_1 = appcommon_1_1;
                 appcommon_2 = appcommon_1_1;
@@ -30,8 +29,8 @@ System.register(['lodash', 'jquery', 'bootstrap/js/bootstrap.js', "./appcommon"]
                         }
                         else {
                             appcommon_2.showAlert("Logging in....", "glyphicon-info-sign", "alert-info");
-                            jquery_1.default("#btnSubmit").prop("disabled", true);
-                            jquery_1.default("#btnSubmit").css("cursor", "wait");
+                            $("#btnSubmit").prop("disabled", true);
+                            $("#btnSubmit").css("cursor", "wait");
                             var auser = { UserName: u, Password: p };
                             //var url = "http://" + window.location.host + "/login";
                             var url = appcommon_3.peSvcUrl + "login";
@@ -41,9 +40,9 @@ System.register(['lodash', 'jquery', 'bootstrap/js/bootstrap.js', "./appcommon"]
                     };
                     this.logReady = function () {
                         console.log('hee');
-                        jquery_1.default(document).ready(function () {
-                            jquery_1.default("#btnSubmit").on("click", _this.doLogin);
-                            jquery_1.default('.container').keypress(function (e) {
+                        $(document).ready(function () {
+                            $("#btnSubmit").on("click", _this.doLogin);
+                            $('.container').keypress(function (e) {
                                 if (e.which == 13) {
                                     _this.doLogin();
                                 }
@@ -66,16 +65,18 @@ System.register(['lodash', 'jquery', 'bootstrap/js/bootstrap.js', "./appcommon"]
                                 loginTime: currTime
                             };
                             window.localStorage.setItem(appcommon_1.lsName, JSON.stringify(o));
-                            //var page = (window.location.search != '?q=2') ? "/stats.html" : "/index.html";
-                            //var page = (o.isAdmin == 'Y') ? "/stats.html" : "/index.html";
                             var page = "index.html";
-                            window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + "index.html";
+                            window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + page;
                         }
                         else {
-                            appcommon_2.showAlert("Invalid cwid and/or password", "glyphicon-exclamation-sign", "alert-danger");
-                            jquery_1.default("#btnSubmit").button('reset');
-                            jquery_1.default("#btnSubmit").prop("disabled", false);
-                            jquery_1.default("#btnSubmit").css("cursor", "none");
+                            var msg = "Invalid cwid and/or password";
+                            if (data.ErrMsg.indexOf('exception') != -1) {
+                                msg = "Communications error, please contact support";
+                            }
+                            appcommon_2.showAlert(msg, "glyphicon-exclamation-sign", "alert-danger");
+                            $("#btnSubmit").button('reset');
+                            $("#btnSubmit").prop("disabled", false);
+                            $("#btnSubmit").css("cursor", "pointer");
                         }
                     };
                     console.log(msg);

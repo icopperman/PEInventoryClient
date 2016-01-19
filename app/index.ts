@@ -1,7 +1,13 @@
-﻿import * as _ from 'lodash';
-import $ from 'jquery';
+﻿import {Component } from 'angular2/core';
+import {NgForm} from 'angular2/common';
 
-import 'bootstrap/js/bootstrap.js';
+//import * as _ from 'lodash';
+//import * as $ from 'jquery';
+
+//import _ from 'lodash';
+//import $ from 'jquery';
+
+//import 'bootstrap/js/bootstrap.js';
 
 import {lsName} from "./appcommon";
 import {showAlert} from "./appcommon";
@@ -35,26 +41,31 @@ export interface LocalLoginData {
     loginTime: number;
 }
 
+@Component({
 
-class Login {
+    selector: 'loginForm',
+    templateUrl: 'app/loginForm.html'
+
+})
+export class Index {
 
     sloginTime:number;
     eloginTime:number;
 
-    constructor(msg:string) {
+    constructor() {
 
-        console.log(msg);
+        console.log('index constructor');
 
     }
 
 
-    doLogin = () => {
+    doLogin = (u:string, p: string) => {
 
         //var u = $("#username").val();
         //var p = $("#password").val();
 
-        var u = "irc9012";// $("#username").val();
-        var p = "Word16nyh";//$("#password").val();
+        //var u = "irc9012";// $("#username").val();
+        //var p = "Word16nyh";//$("#password").val();
 
 
         if ( ( _.isEmpty(u) == true ) || ( _.isEmpty(p) == true ) ) {
@@ -89,11 +100,11 @@ class Login {
 
         $(document).ready(() => {
 
-            $("#btnSubmit").on("click", this.doLogin);
+            //$("#btnSubmit").on("click", this.doLogin);
             $('.container').keypress((e:KeyboardEvent) => {
                 if (e.which == 13) {
 
-                    this.doLogin();
+                 //   this.doLogin();
                 }
             });
 
@@ -123,19 +134,24 @@ class Login {
 
             window.localStorage.setItem(lsName, JSON.stringify(o));
 
-            //var page = (window.location.search != '?q=2') ? "/stats.html" : "/index.html";
-            //var page = (o.isAdmin == 'Y') ? "/stats.html" : "/index.html";
             var page = "index.html";
-            window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + "index.html";
+        window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + page;
 
         }
         else {
 
-            showAlert("Invalid cwid and/or password", "glyphicon-exclamation-sign", "alert-danger");
+        var msg = "Invalid cwid and/or password";
+
+        if (data.ErrMsg.indexOf('exception') != -1) {
+
+            msg = "Communications error, please contact support";
+        }
+
+        showAlert(msg, "glyphicon-exclamation-sign", "alert-danger");
 
             $("#btnSubmit").button('reset');
             $("#btnSubmit").prop("disabled", false);
-            $("#btnSubmit").css("cursor", "none");
+            $("#btnSubmit").css("cursor", "pointer");
 
         }
 
@@ -143,8 +159,8 @@ class Login {
 
 }
 
-var x = new Login("hello");
+//var x = new Login("hello");
 
-x.logReady();
+//x.logReady();
 
 

@@ -1,8 +1,10 @@
-﻿import * as _ from 'lodash';
-import $ from 'jquery';
-
+﻿//import * as _ from 'lodash';
+//import * as $ from 'jquery';
 import * as bootstrap from 'bootstrap';
 
+//import _ from 'lodash';
+//import $ from 'jquery';
+//import bootstrap from 'bootstrap';
 
 export var peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvcProd/"
 //export var peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvc/";

@@ -1,20 +1,19 @@
-System.register(['jquery'], function(exports_1) {
-    var jquery_1;
+System.register([], function(exports_1) {
     var peSvcUrl, lsName;
     function showAlert(msg, icon, alertClass) {
         if (alertClass != null) {
-            jquery_1.default("#divAlert").removeClass().addClass("alert " + alertClass);
+            $("#divAlert").removeClass().addClass("alert " + alertClass);
         }
-        jquery_1.default("#msgIcon").removeClass();
-        jquery_1.default("#msgIcon").addClass("glyphicon " + icon);
-        jquery_1.default("#msgAlert").text(msg);
-        jquery_1.default("#divAlert").toggle(true);
+        $("#msgIcon").removeClass();
+        $("#msgIcon").addClass("glyphicon " + icon);
+        $("#msgAlert").text(msg);
+        $("#divAlert").toggle(true);
     }
     exports_1("showAlert", showAlert);
     function invokeSvc(url, op, user, responseFunc) {
         var xx = JSON.stringify(user);
-        jquery_1.default.support.cors = true;
-        jquery_1.default.ajax(url, {
+        $.support.cors = true;
+        $.ajax(url, {
             type: op,
             contentType: "application/json",
             data: xx,
@@ -24,20 +23,20 @@ System.register(['jquery'], function(exports_1) {
             error: function (jqxhr, textstatus, errorthrown) {
                 console.log("invoked webapi svc, error: " + textstatus + "," + errorthrown);
                 showAlert("Comunication error, please try later", "glyphicon-exclamation-sign");
-                jquery_1.default("#btnSubmit").button('reset');
-                jquery_1.default("#btnSubmit").prop("disabled", false);
-                jquery_1.default("#btnSubmit").css("cursor", "pointer");
-                jquery_1.default("#waitForBedInfo").modal('hide');
+                $("#btnSubmit").button('reset');
+                $("#btnSubmit").prop("disabled", false);
+                $("#btnSubmit").css("cursor", "pointer");
+                $("#waitForBedInfo").modal('hide');
             }
         });
     }
     exports_1("invokeSvc", invokeSvc);
     return {
-        setters:[
-            function (jquery_1_1) {
-                jquery_1 = jquery_1_1;
-            }],
+        setters:[],
         execute: function() {
+            //import _ from 'lodash';
+            //import $ from 'jquery';
+            //import bootstrap from 'bootstrap';
             exports_1("peSvcUrl", peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvcProd/");
             //export var peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvc/";
             //var peSvcUrl = "http://nypstag1mn:999/";
