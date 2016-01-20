@@ -1,4 +1,4 @@
-System.register(['angular2/core', "./appcommon"], function(exports_1) {
+System.register(['angular2/core', "./appcommon", "./getData.service"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(['angular2/core', "./appcommon"], function(exports_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, appcommon_1, appcommon_2, appcommon_3, appcommon_4;
+    var core_1, appcommon_1, appcommon_2, appcommon_3, getData_service_1;
     var Index;
     return {
         setters:[
@@ -19,29 +19,32 @@ System.register(['angular2/core', "./appcommon"], function(exports_1) {
                 appcommon_1 = appcommon_1_1;
                 appcommon_2 = appcommon_1_1;
                 appcommon_3 = appcommon_1_1;
-                appcommon_4 = appcommon_1_1;
+            },
+            function (getData_service_1_1) {
+                getData_service_1 = getData_service_1_1;
             }],
         execute: function() {
             Index = (function () {
-                function Index() {
+                function Index(_getDataSvc) {
                     var _this = this;
+                    this._getDataSvc = _getDataSvc;
                     this.doLogin = function (u, p) {
                         //var u = $("#username").val();
                         //var p = $("#password").val();
-                        //var u = "irc9012";// $("#username").val();
-                        //var p = "Word16nyh";//$("#password").val();
+                        var u = "irc9012"; // $("#username").val();
+                        var p = "Word16nyh"; //$("#password").val();
                         if ((_.isEmpty(u) == true) || (_.isEmpty(p) == true)) {
                             appcommon_2.showAlert("Please enter all fields", "glyphicon-exclamation-sign");
                         }
                         else {
                             appcommon_2.showAlert("Logging in....", "glyphicon-info-sign", "alert-info");
-                            $("#btnSubmit").prop("disabled", true);
-                            $("#btnSubmit").css("cursor", "wait");
+                            //$("#btnSubmit").prop("disabled", true);
+                            //$("#btnSubmit").css("cursor", "wait");
                             var auser = { UserName: u, Password: p };
                             //var url = "http://" + window.location.host + "/login";
                             var url = appcommon_3.peSvcUrl + "login";
                             _this.sloginTime = new Date().getTime();
-                            appcommon_4.invokeSvc(url, "POST", auser, _this.parseLoginData);
+                            _this._getDataSvc.getData(url, "POST", auser);
                         }
                     };
                     this.logReady = function () {
@@ -86,12 +89,16 @@ System.register(['angular2/core', "./appcommon"], function(exports_1) {
                     };
                     console.log('index constructor');
                 }
+                Index.prototype.ngOnInit = function () {
+                    console.log('Index oninit');
+                };
                 Index = __decorate([
                     core_1.Component({
                         selector: 'loginForm',
-                        templateUrl: 'app/loginForm.html'
+                        templateUrl: 'app/loginForm.html',
+                        providers: [getData_service_1.getDataService]
                     }), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [getData_service_1.getDataService])
                 ], Index);
                 return Index;
             })();

@@ -1,0 +1,30 @@
+<div class="jumbotron" style="margin-top: 100px; margin-left: auto; margin-right: auto;
+                width: 70%; background-color: #82a6e6;">
+    <h1>Patient Engagement Tablet Inventory</h1>
+
+    <form id="form1" class="form-horizontal">
+        <div class="form-group">
+            <label for="username">User ID</label>
+            <input #user class="form-control" type="text" id="username" name="username"  />
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input #pass class="form-control" type="password" id="password" name="password" />
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" type="button" id="btnSubmit" name="btnSubmit"
+                    data-loading-text="Logging in..."
+                    (click)="doLogin(user.value, pass.value)"
+            >
+                Login
+            </button>
+
+        </div>
+        <div id="divAlert" class="alert alert-danger" role="alert" style="display: none;">
+            <span id="msgIcon" class="glyphicon glyphicon-exclamation-sign"></span>
+            <span id="msgAlert"></span>
+        </div>
+
+    </form>
+
+</div>

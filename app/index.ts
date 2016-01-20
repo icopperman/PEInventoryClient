@@ -1,4 +1,4 @@
-﻿import {Component } from 'angular2/core';
+﻿import {Component, OnInit } from 'angular2/core';
 import {NgForm} from 'angular2/common';
 
 //import * as _ from 'lodash';
@@ -13,6 +13,7 @@ import {lsName} from "./appcommon";
 import {showAlert} from "./appcommon";
 import {peSvcUrl} from "./appcommon";
 import {invokeSvc} from "./appcommon";
+import {getDataService} from "./getData.service";
 
 interface LoginData {
 
@@ -44,28 +45,33 @@ export interface LocalLoginData {
 @Component({
 
     selector: 'loginForm',
-    templateUrl: 'app/loginForm.html'
+    templateUrl: 'app/loginForm.html',
+    providers: [getDataService]
 
 })
-export class Index {
+export class Index implements OnInit{
 
     sloginTime:number;
     eloginTime:number;
 
-    constructor() {
+    constructor(private _getDataSvc: getDataService) {
 
         console.log('index constructor');
 
     }
 
+    ngOnInit() {
+
+        console.log('Index oninit');
+    }
 
     doLogin = (u:string, p: string) => {
 
         //var u = $("#username").val();
         //var p = $("#password").val();
 
-        //var u = "irc9012";// $("#username").val();
-        //var p = "Word16nyh";//$("#password").val();
+        var u = "irc9012";// $("#username").val();
+        var p = "Word16nyh";//$("#password").val();
 
 
         if ( ( _.isEmpty(u) == true ) || ( _.isEmpty(p) == true ) ) {
@@ -77,8 +83,8 @@ export class Index {
 
             showAlert("Logging in....", "glyphicon-info-sign", "alert-info");
 
-            $("#btnSubmit").prop("disabled", true);
-            $("#btnSubmit").css("cursor", "wait");
+            //$("#btnSubmit").prop("disabled", true);
+            //$("#btnSubmit").css("cursor", "wait");
 
             var auser = {UserName: u, Password: p};
 
@@ -88,7 +94,9 @@ export class Index {
 
             this.sloginTime = new Date().getTime();
 
-            invokeSvc(url, "POST", auser, this.parseLoginData);
+            this._getDataSvc.getData(url, "POST", auser)
+
+            //invokeSvc(url, "POST", auser, this.parseLoginData);
 
         }
 
