@@ -34,11 +34,8 @@ System.register([], function(exports_1) {
     return {
         setters:[],
         execute: function() {
-            //import _ from 'lodash';
-            //import $ from 'jquery';
-            //import bootstrap from 'bootstrap';
-            exports_1("peSvcUrl", peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvcProd/");
-            //export var peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvc/";
+            //export var peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvcProd/"
+            exports_1("peSvcUrl", peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvc/");
             //var peSvcUrl = "http://nypstag1mn:999/";
             //var peSvcUrl = "http://localhost:58087/";
             exports_1("lsName", lsName = "loggedInUserClient");
