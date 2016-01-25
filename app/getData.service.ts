@@ -1,30 +1,44 @@
 import {Injectable} from 'angular2/core';
-import {Http, RequestOptions, RequestOptionsArgs} from 'angular2/http';
+import {Http,  HTTP_PROVIDERS, Request, RequestMethod, RequestOptions, Headers} from 'angular2/http';
+import 'rxjs/Rx';
 
 @Injectable()
-export class getDataService{
+export class getDataService {
 
-    constructor(public http: Http) {}
+    constructor(public http:Http) {
+    }
 
-    getData(url: string, httpfunction: string, data: any) {
+    getData(url:string, httpfunction:string, data:any) {
 
         //let ro: RequestOptionsArg = { method: httpfunction};
 
         switch (httpfunction) {
 
             case "GET":
-                this.http.get(url)
-                    .map(function(item,idx) {
+                return this.http.get(url)
+                    .map(function (item, idx) {
                         return item.json();
                     })
-                    .subscribe(next, error, complete);
+                 //   .subscribe(next, error, complete);
                 break;
             case "POST":
-                this.http.post(url)
-                    .map(function(item,idx) {
+                let abody:string = JSON.stringify(data);
+                let theheaders:Headers = new Headers();
+                theheaders.append("Content-type", "application/json");
+
+                let ro:RequestOptions = new RequestOptions({
+                    method: RequestMethod.Post,
+                    headers: theheaders,
+                    body: abody,
+                    url: url
+
+                });
+                return this.http.request(new Request(ro))
+                    .map(function (item, idx) {
                         return item.json();
-                    })
-                    .subscribe(next, error, complete);
+                    });
+
+                //    .subscribe(next, error, complete);
                 break;
 
         }

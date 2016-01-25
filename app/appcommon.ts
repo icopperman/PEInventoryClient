@@ -1,13 +1,7 @@
-﻿//import * as _ from 'lodash';
-//import * as $ from 'jquery';
-import * as bootstrap from 'bootstrap';
+﻿import * as bootstrap from 'bootstrap';
 
-//import _ from 'lodash';
-//import $ from 'jquery';
-//import bootstrap from 'bootstrap';
-
-export var peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvcProd/"
-//export var peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvc/";
+//export var peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvcProd/"
+export var peSvcUrl = "http://webdev.nyp.org/InventoryTrackerSvc/";
 //var peSvcUrl = "http://nypstag1mn:999/";
 //var peSvcUrl = "http://localhost:58087/";
 

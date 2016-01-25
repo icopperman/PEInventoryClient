@@ -14,47 +14,24 @@ import {showAlert} from "./appcommon";
 import {peSvcUrl} from "./appcommon";
 import {invokeSvc} from "./appcommon";
 import {getDataService} from "./getData.service";
-
-interface LoginData {
-
-    ErrMsg: string;
-    PreferredCampus: string;
-    PreferredUnit: string;
-    Status: string;
-    UserName: string;
-    idxLogin: string;
-    idxUser: string;
-    isAdmin: string;
-    timeCwid: string;
-    timeDb: string;
-    timePswd: string;
-
-}
-
-export interface LocalLoginData {
-
-    user: string;
-    preferredCampus: string;
-    preferredUnit: string;
-    idxUser: string;
-    idxLogin: string;
-    isAdmin: string;
-    loginTime: number;
-}
+import {getLocalDataService} from "./getLocalData.service";
+import {LocalLoginData} from "./interfaces";
+import {LoginData} from "./interfaces";
 
 @Component({
 
     selector: 'loginForm',
     templateUrl: 'app/loginForm.html',
-    providers: [getDataService]
+    providers: [getDataService, getLocalDataService]
 
 })
-export class Index implements OnInit{
+export class Index implements OnInit {
 
     sloginTime:number;
     eloginTime:number;
 
-    constructor(private _getDataSvc: getDataService) {
+    constructor(public _ds:getDataService,
+        public _ls: getLocalDataService) {
 
         console.log('index constructor');
 
@@ -65,16 +42,16 @@ export class Index implements OnInit{
         console.log('Index oninit');
     }
 
-    doLogin = (u:string, p: string) => {
+    doLogin = (u:string, p:string) => {
 
         //var u = $("#username").val();
         //var p = $("#password").val();
 
         var u = "irc9012";// $("#username").val();
-        var p = "Word16nyh";//$("#password").val();
+        var p = "Word17nyh";//$("#password").val();
 
 
-        if ( ( _.isEmpty(u) == true ) || ( _.isEmpty(p) == true ) ) {
+        if (( _.isEmpty(u) == true ) || ( _.isEmpty(p) == true )) {
 
             showAlert("Please enter all fields", "glyphicon-exclamation-sign");
 
@@ -94,29 +71,12 @@ export class Index implements OnInit{
 
             this.sloginTime = new Date().getTime();
 
-            this._getDataSvc.getData(url, "POST", auser)
-
+            this._ds.getData(url, "POST", auser)
+                .subscribe(this.parseLoginData, this.parseLoginDataErr);
             //invokeSvc(url, "POST", auser, this.parseLoginData);
 
         }
 
-    };
-
-    logReady = () => {
-
-        console.log('hee');
-
-        $(document).ready(() => {
-
-            //$("#btnSubmit").on("click", this.doLogin);
-            $('.container').keypress((e:KeyboardEvent) => {
-                if (e.which == 13) {
-
-                 //   this.doLogin();
-                }
-            });
-
-        }); //end doc ready
     };
 
     parseLoginData = (data:LoginData) => {
@@ -140,13 +100,33 @@ export class Index implements OnInit{
 
             };
 
-            window.localStorage.setItem(lsName, JSON.stringify(o));
+            this._ls.setLocalData(lsName, o );
+            //window.localStorage.setItem(lsName, JSON.stringify(o));
 
-            var page = "index.html";
-        window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + page;
+            var page = "grid.html";
+            window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + page;
 
         }
         else {
+
+            var msg = "Invalid cwid and/or password";
+
+            if (data.ErrMsg.indexOf('exception') != -1) {
+
+                msg = "Communications error, please contact support";
+            }
+
+            showAlert(msg, "glyphicon-exclamation-sign", "alert-danger");
+
+            $("#btnSubmit").button('reset');
+            $("#btnSubmit").prop("disabled", false);
+            $("#btnSubmit").css("cursor", "pointer");
+
+        }
+
+    };
+
+    parseLoginDataErr = (data:LoginData) => {
 
         var msg = "Invalid cwid and/or password";
 
@@ -157,14 +137,28 @@ export class Index implements OnInit{
 
         showAlert(msg, "glyphicon-exclamation-sign", "alert-danger");
 
-            $("#btnSubmit").button('reset');
-            $("#btnSubmit").prop("disabled", false);
-            $("#btnSubmit").css("cursor", "pointer");
-
-        }
+        $("#btnSubmit").button('reset');
+        $("#btnSubmit").prop("disabled", false);
+        $("#btnSubmit").css("cursor", "pointer");
 
     };
 
+    logReady = () => {
+
+        console.log('hee');
+
+        $(document).ready(() => {
+
+            //$("#btnSubmit").on("click", this.doLogin);
+            $('.container').keypress((e:KeyboardEvent) => {
+                if (e.which == 13) {
+
+                    //   this.doLogin();
+                }
+            });
+
+        }); //end doc ready
+    };
 }
 
 //var x = new Login("hello");

@@ -7,23 +7,40 @@
     <link href="styles/bootstrap.css" rel="stylesheet" />
     <link href="styles/sidebar.css" rel="stylesheet" />
 
-    <script src="jspm_packages/system.js"></script>
+    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <script src="node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="node_modules/angular2/bundles/http.dev.js"></script>
+
     <!--<script src="config.js"></script>-->
 
-    <!--<script src="js/vendor/jquery-1.11.3.js"></script>-->
-    <!--<script src="js/vendor/jquery-2.1.4.js"></script>-->
+    <script src="app/jquery-2.1.4.js"></script>
+    <script src="app/bootstrap.js"></script>
+    <script src="app/lodash.min.js"></script>
 
-    <!--<script src="js/vendor/lodash.min.js"></script>-->
-    <!--<script src="js/vendor/bootstrap.js"></script>-->
-    <!---->
     <!--<script src="js/app/appcommon.js"></script>-->
     <!--<script src="js/app/index.js"></script>-->
-    <!--&lt;!&ndash;[if lte IE 9]>-->
-    <!--<script type='text/javascript' src='js/app/jQuery.XDomainRequest.js'></script>-->
-    <![endif]-->
-    <!--[if lt IE 8]>
-        <!--<link href="styles/bootstrap-ie7.css" rel="stylesheet">-->
-    <![endif]-->
+    <script>
+        System.config({
+            packages: {
+                app: {
+                    format: 'register',
+                    defaultExtension: 'js'
+                }
+            }
+        });
+        //System.import("app/grid")
+        System.import("app/bootgrid")
+                .then(function () {
+                    console.log('grid here');
+                    //logReady();
+                })
+                .catch(function (err) {
+                    console.log('error' + err);
+                });
+
+    </script>
 
 </head>
 <body>
@@ -64,85 +81,13 @@
     </div><!-- /.modal -->
 
     <div id="wrapper">
-
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper" style="background-color: #82a6e6">
-
-            <h3 style="margin-left: 30px; margin-right: 30px;">Campuses</h3>
-
-            <div id=" selcampuses" class="btn-group btn-group-lg" data-toggle="buttons"
-                 style="width: 100%; padding-top: 0px; padding-bottom: 0px; padding-left: 30px; padding-right: 30px;">
-                <label id="lblWest" class="btn btn-primary " style="width: 50%;">
-                    <input id="rbWest" type="radio" name="campuses" autocomplete="off"  />West
-                </label>
-                <label id="lblEast" class="btn btn-primary" style="width: 50%;">
-                    <input id="rbEast" type="radio" name="campuses" autocomplete="off">East
-                </label>
-
-            </div>
-            <h3 style="margin-left: 30px; margin-right: 30px;">Units</h3>
-
-            <ul id="westUnits" class="list-group" style="padding-left: 30px; padding-right: 30px;"></ul>
-            <ul id="eastUnits" class="list-group" style="padding-left: 30px; padding-right: 30px;"></ul>
-        </div>
-        <!-- /#sidebar-wrapper -->
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <a href="#sidebar-toggle" class="btn btn-primary btn-sm" id="sidebar-toggle">
-                            <span id="sidebar-toggle-img" class="glyphicon glyphicon-arrow-left"></span>
-                        </a>
-                        <a role="button" href="#" class="btn btn-primary btn-lg pull-right" style="margin-left: 30px; margin-right: 30px;"
-                           id="btnLogoff" name="btnLogoff">Sign Out</a>
-
-
-                        <h1 id="unitHeader">
-                            Tablet Inventory for
-                            <span id="campusHdr"></span>
-                            <span id="unitHdr"></span>
-                        </h1>
-                        <div id="divAlert" class="alert alert-danger" role="alert" style="display: none;">
-                            <span id="msgIcon" class="glyphicon glyphicon-exclamation-sign"></span>
-                            <span id="msgAlert"></span>
-                        </div>
-                        <br />
-                        <div>
-                            <h2>Tablets broken or missing? Start a <a href="https://nypres.service-now.com/nyp-portal/" target="_blank"><span style="color: red;"> Service Desk</span></a> ticket</h2>
-                        </div>
-
-                        <br />
-                        <br />
-                        <table class="table table-bordered table-hover" id="beds"></table>
-                        <br />
-                        
-                        <div id="hdrDisNoReturn">
-                            <h4></h4>
-                        </div>
-                        <table class="table table-bordered table-hover" id="beds1"></table>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /#page-content-wrapper -->
+        <sidebar>Loading...</sidebar>
+        <!--<content>Loading...</content>-->
 
     </div>
     <!-- /#wrapper -->
 
-    <script type="text/javascript">
-        System.import("app/grid")
-                .then(function() {
-                    console.log('here');
-                    //indexReady();
-                })
-                .catch(function(err) {
-                    console.log('error' + err);
-                });
 
-
-    </script>
 </body>
 
 

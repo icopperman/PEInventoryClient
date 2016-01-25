@@ -11,344 +11,53 @@ import {showAlert} from "./appcommon";
 import {peSvcUrl} from "./appcommon";
 import {invokeSvc} from "./appcommon";
 import Dictionary = _.Dictionary;
-import {LocalLoginData} from "./index";
 
-//import {verifyLogin} from './appcommon';
-//import {doLogoff} from './appcommon';
-//import {getAllUnits} from './appcommon';
-interface returnStatus {
-
-    ErrMsg: string;
-    Status: string;
-
-}
-
-interface CheckInData {
-
-//    rc: returnStatus;
-    ErrMsg: string;
-    Status: string;
-
-    CheckedOutBy : string;
-    CheckOutTime : string;
-    CheckInTime  : string;
-    TabletID     : string;
-    idInventory  : string;
-
-}
-
-interface LogoffData {
-
-//    rc: returnStatus;
-    ErrMsg: string;
-    Status: string;
-
-    PreferredCampus: string;
-    PreferredUnit: string;
-    UserName: string;
-}
-
-interface Unit {
-
-    active: string;
-    campus: string;
-    campus1: string;
-    idUnit: number;
-    name: string;
-    site: string;
-    unitCode: string;
-    unitName: string;
-}
-
-interface Units {
-
-//    rc: returnStatus;
-    ErrMsg: string;
-    Status: string;
-
-    Units: Unit[];
-}
-
-interface Beds {
-
-    // rc: returnStatus;
-    ErrMsg: string;
-    Status: string;
-
-    BedPatients: Bed[];
-}
-interface Bed {
-
-    BedID: string;
-    Campus: string;
-    CheckInTime: string;
-    CheckOutTime: string;
-    CheckedInBy: string;
-    CheckedOutBy: string;
-    Discharged: string;
-    ErrMsg: string;
-    FirstName: string;
-    LastName: string;
-    MRN: string;
-    Status: string;
-    TabletID: string;
-    Unit: string;
-    idInventory: string;
-    tabletype: string;
-}
+import {getDataService} from "./getData.service";
+import {LocalLoginData, Bed, Beds, CheckInData, LoginData, LogoffData} from "./interfaces";
+import {returnStatus, Unit, Units} from "./interfaces";
 
 var prevSortColumn:string = "";
 var currBedIdx:number, currFunc:string;
-var eunits:Unit[] = [];
-var wunits:Unit[] = [];
 var beds:Bed[] = [];
 var loggedInUser:LocalLoginData = null;
 //var doingStats;
 
-indexReady();
+//indexReady();
 function indexReady() {
 
 
     $(document).ready(function () {
 
-        // doingStats = false;
-
-        var isLoggedIn:boolean = verifyLogin();
-
-        if (isLoggedIn == false) {
-
-            window.location.href = "http://" + window.location.host + "/login.html";
-
-        }
-
-        //get all units in all campuses
-        getAllUnits();
-
-        $("#campusHdr").text((loggedInUser.preferredCampus == "E") ? "East Campus" : "West Campus")
-
-        //set up click handlers
-        $('input[type=radio][name=campuses]').on('change', changeCampuses);
-
-        $("#btnLogoff").on("click", doLogoff);
-
-        $("#sidebar-toggle").click(toggleSidebar);
-        //$('[data-toggle="tooltip"]').tooltip();
-        $('body').tooltip({selector: '[data-toggle="tooltip"]'});
-
-        //set focus to input field when bootstrap modal shows
-        $('#divPrompt').on('shown.bs.modal', function () {
-            $('#tabletid').focus()
-        })
+        //// doingStats = false;
+        //
+        //var isLoggedIn:boolean = verifyLogin();
+        //
+        //if (isLoggedIn == false) {
+        //
+        //    window.location.href = "http://" + window.location.host + "/login.html";
+        //
+        //}
+        //
+        ////get all units in all campuses
+        //getAllUnits();
+        //
+        //$("#campusHdr").text((loggedInUser.preferredCampus == "E") ? "East Campus" : "West Campus")
+        //
+        ////set up click handlers
+        //$('input[type=radio][name=campuses]').on('change', changeCampuses);
+        //
+        //$("#btnLogoff").on("click", doLogoff);
+        //
+        //$("#sidebar-toggle").click(toggleSidebar);
+        ////$('[data-toggle="tooltip"]').tooltip();
+        //$('body').tooltip({selector: '[data-toggle="tooltip"]'});
+        //
+        ////set focus to input field when bootstrap modal shows
+        //$('#divPrompt').on('shown.bs.modal', function () {
+        //    $('#tabletid').focus()
+        //})
 
     });
-}
-function toggleSidebar(e:Event) {
-
-
-    e.preventDefault();
-    if ($("#sidebar-toggle-img").hasClass("glyphicon glyphicon-arrow-left") == true) {
-
-        var remove = "glyphicon glyphicon-arrow-left";
-        var add = "glyphicon glyphicon-arrow-right"
-    }
-    else {
-        var remove = "glyphicon glyphicon-arrow-right";
-        var add = "glyphicon glyphicon-arrow-left"
-    }
-    $("#sidebar-toggle-img").removeClass(remove);
-    $("#sidebar-toggle-img").addClass(add);
-
-
-    $("#wrapper").toggleClass("toggled");
-}
-function verifyLogin():boolean {
-
-    var rc:boolean = true;
-
-    var xx:string = window.localStorage.getItem(lsName);
-
-    if (xx == null) {
-
-        console.log('no login');
-
-        rc = false;
-
-    }
-    else {
-
-        loggedInUser = JSON.parse(xx);
-        var loginTime = loggedInUser.loginTime;
-        var currTime = new Date().getTime();
-        var diff = currTime - loginTime;
-
-        console.log("time after login " + diff);
-
-        if (diff > 300000) {
-
-            console.log("too long after login " + diff);
-            rc = false;
-
-        }
-
-        rc = true;
-    }
-
-    return rc;
-}
-//get all units from all campuses
-function getAllUnits() {
-
-    var url = peSvcUrl + "units";
-
-    invokeSvc(url, "GET", null, parseAllUnitsData);
-
-}
-
-function parseAllUnitsData(data:Units) {
-
-
-    if (data.Status != "ok") {
-
-        console.log(data.Status + "," + data.ErrMsg);
-
-        showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
-
-        return;
-
-    }
-
-    var allUnits:Unit[] = data.Units;
-
-    //separate east units from west units
-    var unitsByCampus:Dictionary<Unit[]> = _.groupBy(allUnits, function (aunit:Unit) {
-        return aunit.campus;
-    });
-
-    eunits = unitsByCampus['E'];
-    wunits = unitsByCampus['W'];
-
-    //if user previously chose a campus activate it
-    switch (loggedInUser.preferredCampus) {
-
-        case "W":
-            activateCampus("#westUnits", "#eastUnits", "#lblWest", wunits);
-            break;
-
-        case "E":
-            activateCampus("#eastUnits", "#westUnits", "#lblEast", eunits);
-            break;
-
-        default:
-            activateCampus("#westUnits", "#eastUnits", "#lblWest", wunits);
-            loggedInUser.preferredCampus = "W";
-
-            break;
-    }
-
-    //if user previously selected a unit, go get beds on unit now
-    if (loggedInUser.preferredUnit != null) {
-
-        //find index of preferred unit
-        var preferredUnitIdx:any = _.result(_.find(allUnits, 'unitName', loggedInUser.preferredUnit), 'idUnit');
-
-        //trigger click event on link to get all beds on unit
-        $("#u" + preferredUnitIdx).trigger('click');
-
-    }
-
-}
-
-function changeCampuses() {
-
-    $("#beds").empty();
-    $("#beds1").empty();
-    $("#hdrDisNoReturn").empty();
-    $("#stats").empty();
-    $("#unitHdr").empty();
-
-    var xx = $(this).prop('id');
-
-    switch (xx) {
-
-        case 'rbEast':
-
-            $("#lblWest").removeClass('active');
-            activateCampus("#eastUnits", "#westUnits", "#lblEast", eunits)
-            loggedInUser.preferredCampus = "E";
-            $("#campusHdr").text("East Campus");
-
-            break;
-
-        case 'rbWest':
-
-            $("#lblEast").removeClass('active');
-            activateCampus("#westUnits", "#eastUnits", "#lblWest", wunits)
-            loggedInUser.preferredCampus = "W";
-            $("#campusHdr").text("West Campus");
-            break;
-    }
-
-}
-
-function activateCampus(activeListGroup:string, inactiveListGroup:string, label:string, units:Unit[]) {
-
-    $(activeListGroup).toggle(true);
-    $(inactiveListGroup).toggle(false);
-    $(label).addClass('active');
-    $(inactiveListGroup).empty();
-    $(activeListGroup).empty();
-
-    var unitsList = $(activeListGroup);
-
-    $.each(units, function (idx:number, aunit:Unit) {
-
-        var li = $('<li/>')
-            .addClass('list-group-item')
-            .appendTo(unitsList);
-
-        var a = $('<a/>', {
-            id: "u" + aunit.idUnit,
-            text: aunit.unitName
-            , href: "#"
-
-        });
-
-        a.bind('click', getBedsOnUnit).appendTo(li);
-
-    });
-
-}
-
-function doLogoff() {
-
-    var idxLogin = loggedInUser.idxLogin;
-    var pcampus = loggedInUser.preferredCampus;
-    var punit = loggedInUser.preferredUnit;
-    var theuser = loggedInUser.user;
-
-    var url = peSvcUrl + "login/" + idxLogin;
-
-    var o = {
-        userName: theuser,
-        preferredCampus: pcampus,
-        preferredUnit: punit
-    };
-
-    invokeSvc(url, "PUT", o, parseLogoffData);
-
-}
-
-function parseLogoffData(data:LogoffData) {
-
-    if (data.Status != "ok") {
-
-        console.log(data.Status + "," + data.ErrMsg);
-    }
-
-    window.localStorage.setItem(lsName, JSON.stringify(loggedInUser));
-
-    window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + "login.html";
-
 }
 
 function getBedsOnUnit() {
