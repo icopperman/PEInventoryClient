@@ -1,21 +1,31 @@
 <!-- Sidebar -->
 <div id="sidebar-wrapper" style="background-color: #82a6e6">
 
-    <h3 style="margin-left: 30px; margin-right: 30px;">Campuses</h3>
+    <h3 style="margin-left: 30px; margin-right: 30px;">xCampuses</h3>
 
-    <div id=" selcampuses" class="btn-group btn-group-lg" data-toggle="buttons"
-         style="width: 100%; padding-top: 0px; padding-bottom: 0px; padding-left: 30px; padding-right: 30px;">
+    <div id=" selcampuses" class="btn-group btn-group-lg" data-toggle="buttons"  style="width: 100%; padding-top: 0px; padding-bottom: 0px; padding-left: 30px; padding-right: 30px;">
         <label id="lblWest" class="btn btn-primary " style="width: 50%;">
-            <input id="rbWest" type="radio" name="campuses" autocomplete="off"  />West
+            <input #rbWest
+                   (click)="changeCampuses('W','click')"
+                   (change)="changeCampuses('W','change')"
+                   (checked)="changeCampuses('W','checked')"
+
+                   id="rbWest" type="button" name="campuses"  value="West"  />
         </label>
         <label id="lblEast" class="btn btn-primary" style="width: 50%;">
-            <input id="rbEast" type="radio" name="campuses" autocomplete="off">East
+            <input #rbEast
+                   (click)="changeCampuses('E', 'click')"
+                   (change)="changeCampuses('E', 'change')"
+                   (checked)="changeCampuses('E', 'checked')"
+                   id="rbEast" type="button" name="campuses"  value="East" />
         </label>
-
+{{xcampus}}
     </div>
     <h3 style="margin-left: 30px; margin-right: 30px;">Units</h3>
-
-    <ul id="westUnits" class="list-group" style="padding-left: 30px; padding-right: 30px;"></ul>
-    <ul id="eastUnits" class="list-group" style="padding-left: 30px; padding-right: 30px;"></ul>
+    <div [ngSwitch]="loggedInUser.preferredCampus">
+    <template ngSwitchWhen="W"> <listOfUnits campus="West"></listOfUnits></template>
+    <template ngSwitchWhen="E"><listOfUnits campus="East"></listOfUnits></template>
+    <!--<ul id="westUnits" class="list-group" style="padding-left: 30px; padding-right: 30px;"></ul>-->
+    <!--<ul id="eastUnits" class="list-group" style="padding-left: 30px; padding-right: 30px;"></ul>-->
 </div>
 <!-- /#sidebar-wrapper -->

@@ -1,5 +1,5 @@
-import {Component, OnInit } from 'angular2/core';
-import {NgForm} from 'angular2/common';
+import {Component, OnInit   } from 'angular2/core';
+import {NgSwitch, NgSwitchWhen, FORM_DIRECTIVES} from 'angular2/common';
 
 import Dictionary = _.Dictionary;
 
@@ -11,29 +11,30 @@ import {getDataService} from "./getData.service";
 import {getLocalDataService} from "./getLocalData.service";
 import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./interfaces";
 import {LoginData, Unit, Units} from "./interfaces";
+import {listOfUnits} from './listOfUnits';
 
 @Component({
 
     selector: 'sidebar',
     templateUrl: 'app/sidebar.html',
-    providers: [getDataService, getLocalDataService]
+    providers: [getDataService, getLocalDataService],
+    directives: [FORM_DIRECTIVES, NgSwitch, NgSwitchWhen, listOfUnits]
 
 })
 export class sidebar implements OnInit {
 
     loggedInUser:LocalLoginData = null;
-    eunits:Unit[] = [];
-    wunits:Unit[] = [];
 
-    constructor(public _ls:getLocalDataService, public _ds: getDataService) {
+    constructor(public _ls:getLocalDataService, public _ds:getDataService) {
         console.log('sidebar constructor');
+
     }
 
 
     ngOnInit() {
 
-        console.log('Index oninit sidebar');
         var isLoggedIn:boolean = this.verifyLogin();
+        console.log('sidebar oninit: ' + this.loggedInUser.preferredCampus);
 
         if (isLoggedIn == false) {
 
@@ -41,13 +42,12 @@ export class sidebar implements OnInit {
 
         }
 
-        //get all units in all campuses
-        this.getAllUnits();
+
 
         $("#campusHdr").text((this.loggedInUser.preferredCampus == "E") ? "East Campus" : "West Campus")
 
         //set up click handlers
-        $('input[type=radio][name=campuses]').on('change', this.changeCampuses);
+       // $('input[type=radio][name=campuses]').on('change', this.changeCampuses);
 
 
         //set focus to input field when bootstrap modal shows
@@ -57,86 +57,10 @@ export class sidebar implements OnInit {
 
     }
 
-    //get all units from all campuses
-    getAllUnits() {
-
-        var url = peSvcUrl + "units";
-
-        this._ds.getData(url, "GET", null)
-            .subscribe(this.parseAllUnitsData, this.parseAllUnitsDataErr);
-
-        //invokeSvc(url, "GET", null, this.parseAllUnitsData);
-
-    }
-
-    parseAllUnitsDataErr(data:Units) {
-
-            console.log(data.Status + "," + data.ErrMsg);
-
-            showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
-
-            return;
-
-        }
-
-    parseAllUnitsData(data:Units) {
-
-        if (data.Status != "ok") {
-
-            console.log(data.Status + "," + data.ErrMsg);
-
-            showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
-
-            return;
-
-        }
-
-        var allUnits:Unit[] = data.Units;
-
-        //separate east units from west units
-        var unitsByCampus:Dictionary<Unit[]> = _.groupBy(allUnits, function (aunit:Unit) {
-            return aunit.campus;
-        });
-
-        this.eunits = unitsByCampus['E'];
-        this.wunits = unitsByCampus['W'];
-
-        //it appears that properties are now preserved across asynch actions, so refresh
-        this.loggedInUser = this._ls.getLocalData(lsName);
-
-        //if user previously chose a campus activate it
-        switch (this.loggedInUser.preferredCampus) {
-
-            case "W":
-                this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
-                break;
-
-            case "E":
-                this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
-                break;
-
-            default:
-                this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
-                this.loggedInUser.preferredCampus = "W";
-
-                break;
-        }
-
-        //if user previously selected a unit, go get beds on unit now
-        if (this.loggedInUser.preferredUnit != null) {
-
-            //find index of preferred unit
-            var preferredUnitIdx:any = _.result(_.find(allUnits, 'unitName', this.loggedInUser.preferredUnit), 'idUnit');
-
-            //trigger click event on link to get all beds on unit
-            $("#u" + preferredUnitIdx).trigger('click');
-
-        }
-
-    }
 
 
-    changeCampuses() {
+
+    changeCampuses(campus, type) {
 
         $("#beds").empty();
         $("#beds1").empty();
@@ -144,23 +68,23 @@ export class sidebar implements OnInit {
         $("#stats").empty();
         $("#unitHdr").empty();
 
-        var xx = $(this).prop('id');
+        //var xx = $(this).prop('id');
 
-        switch (xx) {
+        switch (campus) {
 
-            case 'rbEast':
+            case 'E':
 
                 $("#lblWest").removeClass('active');
-                this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
+       //         this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
                 this.loggedInUser.preferredCampus = "E";
                 $("#campusHdr").text("East Campus");
 
                 break;
 
-            case 'rbWest':
+            case 'W':
 
                 $("#lblEast").removeClass('active');
-                this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
+    //            this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
                 this.loggedInUser.preferredCampus = "W";
                 $("#campusHdr").text("West Campus");
                 break;
@@ -168,11 +92,40 @@ export class sidebar implements OnInit {
 
     }
 
+    activateCampus(activeListGroup:string, inactiveListGroup:string, label:string, units:Unit[]) {
+
+        $(activeListGroup).toggle(true);
+        $(inactiveListGroup).toggle(false);
+        $(label).addClass('active');
+        $(inactiveListGroup).empty();
+        $(activeListGroup).empty();
+
+        //var unitsList = $(activeListGroup);
+        //
+        //$.each(units, function (idx:number, aunit:Unit) {
+        //
+        //    var li = $('<li/>')
+        //        .addClass('list-group-item')
+        //        .appendTo(unitsList);
+        //
+        //    var a = $('<a/>', {
+        //        id: "u" + aunit.idUnit,
+        //        text: aunit.unitName
+        //        , href: "#"
+        //
+        //    });
+        //
+        //    a.bind('click', this.getBedsOnUnit).appendTo(li);
+        //
+        //});
+
+    }
+
     verifyLogin():boolean {
 
         var rc:boolean = true;
 
-        this.loggedInUser = this._ls.getLocalData(lsName);
+        this.loggedInUser = this._ls.getLocalData(lsName, 'verifylogin');
         //    window.localStorage.getItem(lsName);
 
         if (this.loggedInUser == null) {
@@ -204,35 +157,72 @@ export class sidebar implements OnInit {
         return rc;
     }
 
+    //parseAllUnitsDataErr(data:Units) {
+    //
+    //    console.log(data.Status + "," + data.ErrMsg);
+    //
+    //    showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
+    //
+    //    return;
+    //
+    //}
+    //
+    //parseAllUnitsData(data:Units) {
+    //
+    //    if (data.Status != "ok") {
+    //
+    //        console.log(data.Status + "," + data.ErrMsg);
+    //
+    //        showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
+    //
+    //        return;
+    //
+    //    }
+    //
+    //    var allUnits:Unit[] = data.Units;
+    //
+    //    //separate east units from west units
+    //    var unitsByCampus:Dictionary<Unit[]> = _.groupBy(allUnits, function (aunit:Unit) {
+    //        return aunit.campus;
+    //    });
+    //
+    //    this.eunits = unitsByCampus['E'];
+    //    this.wunits = unitsByCampus['W'];
+    //
+    //    //it appears that properties are now preserved across asynch actions, so refresh
+    //    this.loggedInUser = this._ls.getLocalData(lsName, 'parseallunitdata');
+    //
+    //    //if user previously chose a campus activate it
+    //    switch (this.loggedInUser.preferredCampus) {
+    //
+    //        case "W":
+    //            this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
+    //            break;
+    //
+    //        case "E":
+    //            this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
+    //            break;
+    //
+    //        default:
+    //            this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
+    //            this.loggedInUser.preferredCampus = "W";
+    //
+    //            break;
+    //    }
+    //
+    //    //if user previously selected a unit, go get beds on unit now
+    //    if (this.loggedInUser.preferredUnit != null) {
+    //
+    //        //find index of preferred unit
+    //        var preferredUnitIdx:any = _.result(_.find(allUnits, 'unitName', this.loggedInUser.preferredUnit), 'idUnit');
+    //
+    //        //trigger click event on link to get all beds on unit
+    //        $("#u" + preferredUnitIdx).trigger('click');
+    //
+    //    }
+    //
+    //}
 
 
-    activateCampus(activeListGroup:string, inactiveListGroup:string, label:string, units:Unit[]) {
-
-        $(activeListGroup).toggle(true);
-        $(inactiveListGroup).toggle(false);
-        $(label).addClass('active');
-        $(inactiveListGroup).empty();
-        $(activeListGroup).empty();
-
-        var unitsList = $(activeListGroup);
-
-        $.each(units, function (idx:number, aunit:Unit) {
-
-            var li = $('<li/>')
-                .addClass('list-group-item')
-                .appendTo(unitsList);
-
-            var a = $('<a/>', {
-                id: "u" + aunit.idUnit,
-                text: aunit.unitName
-                , href: "#"
-
-            });
-
-            a.bind('click', this.getBedsOnUnit).appendTo(li);
-
-        });
-
-    }
 }
 

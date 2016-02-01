@@ -9,9 +9,9 @@ export class getLocalDataService {
         console.log('local data service constructor');
     }
 
-    getLocalData(lsName:string): LocalLoginData {
+    getLocalData(lsName:string, caller: string): LocalLoginData {
 
-        console.log("getlocaldata");
+        console.log("getlocaldata: " + caller);
         var xx: string = window.localStorage.getItem(lsName);
         var rtnObj: LocalLoginData = JSON.parse(xx);
         return rtnObj;

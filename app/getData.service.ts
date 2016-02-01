@@ -18,7 +18,7 @@ export class getDataService {
                 return this.http.get(url)
                     .map(function (item, idx) {
                         return item.json();
-                    })
+                    });
                  //   .subscribe(next, error, complete);
                 break;
             case "POST":
