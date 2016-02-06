@@ -1,7 +1,7 @@
 <ul class="list-group" style="padding-left: 30px; padding-right: 30px;">
 
     <li *ngFor="#aunit of units" class="list-group-item">
-        <a href="#" [id]="'u' + aunit.idUnit" (click)="getBedsOnUnit()">{{aunit.unitName}}</a>
+        <a href="#" [id]="'u' + aunit.idUnit" (click)="setSelectedUnit(aunit)">{{aunit.unitName}}</a>
     </li>
 
 </ul>

@@ -15,9 +15,9 @@
 
     <!--<script src="config.js"></script>-->
 
-    <script src="app/jquery-2.1.4.js"></script>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
     <script src="app/bootstrap.js"></script>
-    <script src="app/lodash.min.js"></script>
+    <script src="vendor/lodash.min.js"></script>
 
     <!--<script src="js/app/appcommon.js"></script>-->
     <!--<script src="js/app/index.js"></script>-->
@@ -91,7 +91,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <content></content>
+                    <content [theUnit]="selectedUnit"></content>
                 </div>
             </div>
         </div>

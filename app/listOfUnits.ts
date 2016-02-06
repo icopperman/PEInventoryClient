@@ -6,6 +6,7 @@ import {lsName} from "./appcommon";
 import {showAlert} from "./appcommon";
 import {peSvcUrl} from "./appcommon";
 import {invokeSvc} from "./appcommon";
+import {Content} from './content';
 import {getDataService} from "./getData.service";
 import {getLocalDataService} from "./getLocalData.service";
 import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./interfaces";
@@ -16,7 +17,8 @@ import {LoginData, Unit, Units} from "./interfaces";
     selector: 'listOfUnits',
     templateUrl: 'app/listOfUnits.html',
     providers: [getDataService, getLocalDataService],
-    inputs: ['campus']
+    inputs: ['campus'],
+    directives: [Content]
 
 })
 export class listOfUnits implements OnInit {
@@ -26,6 +28,7 @@ export class listOfUnits implements OnInit {
     units: Unit[];
     eunits:Unit[] = [];
     wunits:Unit[] = [];
+    selectedUnit: Unit = null;
 
     constructor(public _ls:getLocalDataService, public _ds: getDataService) {
 
@@ -47,6 +50,12 @@ export class listOfUnits implements OnInit {
         }
     }
 //
+    setSelectedUnit(aunit: Unit) {
+
+        this.selectedUnit = aunit;
+
+
+    }
     getAllUnits() {
 
         console.log('getallunits start: ' + this.campus);
