@@ -23,8 +23,8 @@
     </div>
     <h3 style="margin-left: 30px; margin-right: 30px;">Units</h3>
     <div [ngSwitch]="loggedInUser.preferredCampus">
-    <template ngSwitchWhen="W"> <listOfUnits campus="West"></listOfUnits></template>
-    <template ngSwitchWhen="E"><listOfUnits campus="East"></listOfUnits></template>
+    <template ngSwitchWhen="W"> <listOfUnits (unitSelected)="unitSelectedClick($event)" campus="West"></listOfUnits></template>
+    <template ngSwitchWhen="E"><listOfUnits (unitSelected)="unitSelectedClick($event)" campus="East"></listOfUnits></template>
     <!--<ul id="westUnits" class="list-group" style="padding-left: 30px; padding-right: 30px;"></ul>-->
     <!--<ul id="eastUnits" class="list-group" style="padding-left: 30px; padding-right: 30px;"></ul>-->
 </div>

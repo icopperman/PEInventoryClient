@@ -10,12 +10,14 @@ import {getDataService} from "./getData.service";
 import {getLocalDataService} from "./getLocalData.service";
 import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./interfaces";
 import {LoginData, Unit, Units} from "./interfaces";
+import {listOfUnits} from "./listOfUnits";
 
 @Component({
 
     selector: 'content',
     templateUrl: 'app/content.html',
     providers: [getDataService, getLocalDataService],
+    directives: [listOfUnits],
     inputs: ['theUnit']
 
 })

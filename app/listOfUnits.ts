@@ -1,4 +1,4 @@
-import {Component, OnInit, Input } from 'angular2/core';
+import {Component, OnInit, Input, Output, EventEmitter } from 'angular2/core';
 import {NgForm, NgFor} from 'angular2/common';
 import Dictionary = _.Dictionary;
 
@@ -17,9 +17,9 @@ import {LoginData, Unit, Units} from "./interfaces";
     selector: 'listOfUnits',
     templateUrl: 'app/listOfUnits.html',
     providers: [getDataService, getLocalDataService],
+    directives: [Content],
     inputs: ['campus'],
-    directives: [Content]
-
+    outputs: ['unitSelected']
 })
 export class listOfUnits implements OnInit {
 
@@ -29,6 +29,7 @@ export class listOfUnits implements OnInit {
     eunits:Unit[] = [];
     wunits:Unit[] = [];
     selectedUnit: Unit = null;
+    unitSelected: EventEmitter<Unit> = new EventEmitter();
 
     constructor(public _ls:getLocalDataService, public _ds: getDataService) {
 
@@ -53,7 +54,7 @@ export class listOfUnits implements OnInit {
     setSelectedUnit(aunit: Unit) {
 
         this.selectedUnit = aunit;
-
+        this.unitSelected.emit(this.selectedUnit)
 
     }
     getAllUnits() {

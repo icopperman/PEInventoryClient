@@ -1,4 +1,4 @@
-import {Component, OnInit   } from 'angular2/core';
+import {Component, OnInit, EventEmitter, Output   } from 'angular2/core';
 import {NgSwitch, NgSwitchWhen, FORM_DIRECTIVES} from 'angular2/common';
 
 import Dictionary = _.Dictionary;
@@ -18,12 +18,14 @@ import {listOfUnits} from './listOfUnits';
     selector: 'sidebar',
     templateUrl: 'app/sidebar.html',
     providers: [getDataService, getLocalDataService],
-    directives: [FORM_DIRECTIVES, NgSwitch, NgSwitchWhen, listOfUnits]
+    directives: [FORM_DIRECTIVES, NgSwitch, NgSwitchWhen, listOfUnits],
+    outputs: ['unitSelected']
 
 })
 export class sidebar implements OnInit {
 
     loggedInUser:LocalLoginData = null;
+    unitSelected: EventEmitter<Unit> = new EventEmitter();
 
     constructor(public _ls:getLocalDataService, public _ds:getDataService) {
         console.log('sidebar constructor');
@@ -58,6 +60,11 @@ export class sidebar implements OnInit {
     }
 
 
+    unitSelectedClick(aunit: Unit) {
+
+        console.log('here');
+        this.unitSelected.emit(aunit);
+    }
 
 
     changeCampuses(campus, type) {
