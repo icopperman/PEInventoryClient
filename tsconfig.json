@@ -9,9 +9,12 @@
     "removeComments": false,
     "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": false
-  }
-  ,"exclude": [
-    "node_modules", "jspm_packages"
+  },
+  "exclude": [
+    "node_modules"
+   ,"typings/main.d.ts"
+   ,"typings/main"
+
   ]
 
 }

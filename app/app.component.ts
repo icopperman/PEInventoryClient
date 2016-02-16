@@ -1,9 +1,20 @@
 import {Component } from 'angular2/core';
+import {RouteConfig, ROUTER_DIRECTIVES} from 'angular2/router';
+import {Http, HTTP_PROVIDERS} from 'angular2/http';
+import {LoginComponent} from "./login/login";
 
 @Component({
-    selector: 'my-app',
-    template: '<h1>sldfsjlfds</h1>'
+    selector: 'inventory-app',
+    template: `<router-outlet></router-outlet>`,
+    directives: [ROUTER_DIRECTIVES]
 })
+@RouteConfig([
+
+    { path: '/', name: 'Login', component: LoginComponent, useAsDefault: true }
+]
+
+
+)
 export class AppComponent {
 
 }

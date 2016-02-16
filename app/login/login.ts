@@ -1,5 +1,5 @@
-﻿import {Component, OnInit } from 'angular2/core';
-import {NgForm} from 'angular2/common';
+﻿import {Component, OnInit } from '../../node_modules/angular2/core.d';
+import {NgForm} from '../../node_modules/angular2/common.d';
 
 //import * as _ from 'lodash';
 //import * as $ from 'jquery';
@@ -9,14 +9,10 @@ import {NgForm} from 'angular2/common';
 
 //import 'bootstrap/js/bootstrap.js';
 
-import {lsName} from "./appcommon";
-import {showAlert} from "./appcommon";
-import {peSvcUrl} from "./appcommon";
-import {invokeSvc} from "./appcommon";
-import {getDataService} from "./getData.service";
-import {getLocalDataService} from "./getLocalData.service";
-import {LocalLoginData} from "./interfaces";
-import {LoginData} from "./interfaces";
+import {lsName, showAlert, peSvcUrl, invokeSvc} from "../appcommon";
+import {getDataService} from "../getData.service.ts";
+import {getLocalDataService} from "../getLocalData.service.ts";
+import {LocalLoginData, LoginData} from "../interfaces";
 
 @Component({
 
@@ -25,7 +21,7 @@ import {LoginData} from "./interfaces";
     providers: [getDataService, getLocalDataService]
 
 })
-export class Index implements OnInit {
+export class LoginComponent implements OnInit {
 
     sloginTime:number;
     eloginTime:number;
@@ -39,7 +35,7 @@ export class Index implements OnInit {
 
     ngOnInit() {
 
-        console.log('Index oninit');
+        console.log('Logincomponent oninit');
     }
 
     doLogin = (u:string, p:string) => {

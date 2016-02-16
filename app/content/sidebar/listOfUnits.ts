@@ -1,23 +1,23 @@
-import {Component, OnInit, Input, Output, EventEmitter } from 'angular2/core';
-import {NgForm, NgFor} from 'angular2/common';
+import {Component, OnInit, Input, Output, EventEmitter } from '../../../node_modules/angular2/core.d';
+import {NgForm, NgFor} from '../../../node_modules/angular2/common.d';
 import Dictionary = _.Dictionary;
 
-import {lsName} from "./appcommon";
-import {showAlert} from "./appcommon";
-import {peSvcUrl} from "./appcommon";
-import {invokeSvc} from "./appcommon";
-import {Content} from './content';
-import {getDataService} from "./getData.service";
-import {getLocalDataService} from "./getLocalData.service";
-import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./interfaces";
-import {LoginData, Unit, Units} from "./interfaces";
+import {lsName} from "./../../appcommon";
+import {showAlert} from "./../../appcommon";
+import {peSvcUrl} from "./../../appcommon";
+import {invokeSvc} from "./../../appcommon";
+import {Content} from './../tables/content';
+import {getDataService} from "./../../getData.service.ts";
+import {getLocalDataService} from "./../../getLocalData.service.ts";
+import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../../interfaces";
+import {LoginData, Unit, Units} from "./../../interfaces";
 
 @Component({
 
     selector: 'listOfUnits',
     templateUrl: 'app/listOfUnits.html',
     providers: [getDataService, getLocalDataService],
-    directives: [Content],
+    //directives: [Content],
     inputs: ['campus'],
     outputs: ['unitSelected']
 })

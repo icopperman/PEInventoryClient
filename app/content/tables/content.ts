@@ -1,16 +1,16 @@
-import {Component, OnInit } from 'angular2/core';
-import {NgForm} from 'angular2/common';
+import {Component, OnInit } from '../../../node_modules/angular2/core.d';
+import {NgForm} from '../../../node_modules/angular2/common.d';
 
 
-import {lsName} from "./appcommon";
-import {showAlert} from "./appcommon";
-import {peSvcUrl} from "./appcommon";
-import {invokeSvc} from "./appcommon";
-import {getDataService} from "./getData.service";
-import {getLocalDataService} from "./getLocalData.service";
-import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./interfaces";
-import {LoginData, Unit, Units} from "./interfaces";
-import {listOfUnits} from "./listOfUnits";
+import {lsName} from "./../../appcommon";
+import {showAlert} from "./../../appcommon";
+import {peSvcUrl} from "./../../appcommon";
+import {invokeSvc} from "./../../appcommon";
+import {getDataService} from "./../../getData.service.ts";
+import {getLocalDataService} from "./../../getLocalData.service.ts";
+import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../../interfaces";
+import {LoginData, Unit, Units} from "./../../interfaces";
+import {listOfUnits} from "./../sidebar/listOfUnits";
 
 @Component({
 

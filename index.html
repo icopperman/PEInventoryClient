@@ -11,7 +11,7 @@
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
     <script src="node_modules/angular2/bundles/http.dev.js"></script>
-
+    <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <!--<script src="config.js"></script>-->
 
     <script src="node_modules/jquery/dist/jquery.js"></script>
@@ -21,12 +21,9 @@
     <!--<script src="js/app/appcommon.js"></script>-->
     <script>
         System.config({
-            packages: {
-                app: {
-                    format: 'register',
-                    defaultExtension: 'js'
-                }
-            }
+            map: { rxjs: 'node_modules/rxjs'},
+            packages: { 'app': { defaultExtension: 'js'  }
+                      ,'rxjs': { defaultExtension: 'js'  }}
         });
         System.import("app/boot")
                 .then(function () {
@@ -39,7 +36,8 @@
 
     </script>
 </head>
+<base href="/"/>
 <body class="container" style="background-color: #25788e;">
-<loginForm>Loading...</loginForm>
+<inventory-app>Loading...</inventory-app>
 </body>
 </html>

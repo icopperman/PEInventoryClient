@@ -1,16 +1,16 @@
-import {Component, OnInit, EventEmitter, Output   } from 'angular2/core';
-import {NgSwitch, NgSwitchWhen, FORM_DIRECTIVES} from 'angular2/common';
+import {Component, OnInit, EventEmitter, Output   } from '../../../node_modules/angular2/core.d';
+import {NgSwitch, NgSwitchWhen, FORM_DIRECTIVES} from '../../../node_modules/angular2/common.d';
 
 import Dictionary = _.Dictionary;
 
-import {lsName} from "./appcommon";
-import {showAlert} from "./appcommon";
-import {peSvcUrl} from "./appcommon";
-import {invokeSvc} from "./appcommon";
-import {getDataService} from "./getData.service";
-import {getLocalDataService} from "./getLocalData.service";
-import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./interfaces";
-import {LoginData, Unit, Units} from "./interfaces";
+import {lsName} from "./../../appcommon";
+import {showAlert} from "./../../appcommon";
+import {peSvcUrl} from "./../../appcommon";
+import {invokeSvc} from "./../../appcommon";
+import {getDataService} from "./../../getData.service.ts";
+import {getLocalDataService} from "./../../getLocalData.service.ts";
+import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../../interfaces";
+import {LoginData, Unit, Units} from "./../../interfaces";
 import {listOfUnits} from './listOfUnits';
 
 @Component({
@@ -35,18 +35,18 @@ export class sidebar implements OnInit {
 
     ngOnInit() {
 
-        var isLoggedIn:boolean = this.verifyLogin();
-        console.log('sidebar oninit: ' + this.loggedInUser.preferredCampus);
+        //var isLoggedIn:boolean = this.verifyLogin();
+        //console.log('sidebar oninit: ' + this.loggedInUser.preferredCampus);
+        //
+        //if (isLoggedIn == false) {
+        //
+        //    window.location.href = "http://" + window.location.host + "/login.html";
+        //
+        //}
 
-        if (isLoggedIn == false) {
-
-            window.location.href = "http://" + window.location.host + "/login.html";
-
-        }
 
 
-
-        $("#campusHdr").text((this.loggedInUser.preferredCampus == "E") ? "East Campus" : "West Campus")
+       // $("#campusHdr").text((this.loggedInUser.preferredCampus == "E") ? "East Campus" : "West Campus")
 
         //set up click handlers
        // $('input[type=radio][name=campuses]').on('change', this.changeCampuses);
@@ -128,41 +128,7 @@ export class sidebar implements OnInit {
 
     }
 
-    verifyLogin():boolean {
 
-        var rc:boolean = true;
-
-        this.loggedInUser = this._ls.getLocalData(lsName, 'verifylogin');
-        //    window.localStorage.getItem(lsName);
-
-        if (this.loggedInUser == null) {
-
-            console.log('no login');
-
-            rc = false;
-
-        }
-        else {
-
-            //this.loggedInUser = JSON.parse(xx);
-            var loginTime = this.loggedInUser.loginTime;
-            var currTime = new Date().getTime();
-            var diff = currTime - loginTime;
-
-            console.log("time after login " + diff);
-
-            if (diff > 300000) {
-
-                console.log("too long after login " + diff);
-                rc = false;
-
-            }
-
-            rc = true;
-        }
-
-        return rc;
-    }
 
     //parseAllUnitsDataErr(data:Units) {
     //
