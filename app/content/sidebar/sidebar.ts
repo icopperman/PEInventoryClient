@@ -1,5 +1,5 @@
-import {Component, OnInit, EventEmitter, Output   } from '../../../node_modules/angular2/core.d';
-import {NgSwitch, NgSwitchWhen, FORM_DIRECTIVES} from '../../../node_modules/angular2/common.d';
+import {Component, OnInit, EventEmitter, Output   } from 'angular2/core';
+import {NgSwitch, NgSwitchWhen, FORM_DIRECTIVES} from 'angular2/common';
 
 import Dictionary = _.Dictionary;
 
@@ -7,8 +7,8 @@ import {lsName} from "./../../appcommon";
 import {showAlert} from "./../../appcommon";
 import {peSvcUrl} from "./../../appcommon";
 import {invokeSvc} from "./../../appcommon";
-import {getDataService} from "./../../getData.service.ts";
-import {getLocalDataService} from "./../../getLocalData.service.ts";
+import {getDataService} from "./../../getData.service";
+import {getLocalDataService} from "./../../getLocalData.service";
 import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../../interfaces";
 import {LoginData, Unit, Units} from "./../../interfaces";
 import {listOfUnits} from './listOfUnits';
@@ -16,7 +16,7 @@ import {listOfUnits} from './listOfUnits';
 @Component({
 
     selector: 'sidebar',
-    templateUrl: 'app/sidebar.html',
+    templateUrl: 'app/content/sidebar/sidebar.html',
     providers: [getDataService, getLocalDataService],
     directives: [FORM_DIRECTIVES, NgSwitch, NgSwitchWhen, listOfUnits],
     outputs: ['unitSelected']

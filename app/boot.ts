@@ -4,5 +4,6 @@ import {ROUTER_PROVIDERS} from 'angular2/router';
 
 import {AppComponent} from './app.component';
 
+console.log('in boot.ts');
 bootstrap(AppComponent, [Http, HTTP_PROVIDERS, ROUTER_PROVIDERS]);
 

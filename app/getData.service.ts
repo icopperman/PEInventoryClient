@@ -20,7 +20,7 @@ export class getDataService {
                         return item.json();
                     });
                  //   .subscribe(next, error, complete);
-                break;
+                //break;
             case "POST":
                 let abody:string = JSON.stringify(data);
                 let theheaders:Headers = new Headers();
@@ -39,7 +39,7 @@ export class getDataService {
                     });
 
                 //    .subscribe(next, error, complete);
-                break;
+                //break;
 
         }
         console.log("getdata");

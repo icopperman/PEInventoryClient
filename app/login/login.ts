@@ -1,5 +1,7 @@
-﻿import {Component, OnInit } from '../../node_modules/angular2/core.d';
-import {NgForm} from '../../node_modules/angular2/common.d';
+﻿import {Component, OnInit } from 'angular2/core';
+import {NgForm} from 'angular2/common';
+import {Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
+
 
 //import * as _ from 'lodash';
 //import * as $ from 'jquery';
@@ -10,14 +12,14 @@ import {NgForm} from '../../node_modules/angular2/common.d';
 //import 'bootstrap/js/bootstrap.js';
 
 import {lsName, showAlert, peSvcUrl, invokeSvc} from "../appcommon";
-import {getDataService} from "../getData.service.ts";
-import {getLocalDataService} from "../getLocalData.service.ts";
+import {getDataService} from "../getData.service";
+import {getLocalDataService} from "../getLocalData.service";
 import {LocalLoginData, LoginData} from "../interfaces";
 
 @Component({
 
     selector: 'loginForm',
-    templateUrl: 'app/loginForm.html',
+    templateUrl: 'app/login/loginForm.html',
     providers: [getDataService, getLocalDataService]
 
 })
@@ -26,15 +28,15 @@ export class LoginComponent implements OnInit {
     sloginTime:number;
     eloginTime:number;
 
-    constructor(public _ds:getDataService,
-        public _ls: getLocalDataService) {
-
-        console.log('index constructor');
-
+    constructor(
+        public _ds:getDataService,
+        public _ls: getLocalDataService,
+        public _router: Router
+    ) {
+        console.log('login component constructor');
     }
 
     ngOnInit() {
-
         console.log('Logincomponent oninit');
     }
 
@@ -100,8 +102,8 @@ export class LoginComponent implements OnInit {
             //window.localStorage.setItem(lsName, JSON.stringify(o));
 
             var page = "grid.html";
-            window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + page;
-
+            //window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + page;
+            this._router.navigate(['Content']);
         }
         else {
 
@@ -139,7 +141,7 @@ export class LoginComponent implements OnInit {
 
     };
 
-    logReady = () => {
+    logReady() {
 
         console.log('hee');
 
