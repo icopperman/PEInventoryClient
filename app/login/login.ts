@@ -70,14 +70,17 @@ export class LoginComponent implements OnInit {
             this.sloginTime = new Date().getTime();
 
             this._ds.getData(url, "POST", auser)
-                .subscribe(this.parseLoginData, this.parseLoginDataErr);
+                .subscribe(
+                    data => { this.parseLoginData(this._ls, data) },
+                    err =>  { this.parseLoginDataErr( err) }
+                );
             //invokeSvc(url, "POST", auser, this.parseLoginData);
 
         }
 
     };
 
-    parseLoginData = (data:LoginData) => {
+    parseLoginData = (__ls: getLocalDataService, data:LoginData) => {
 
         this.eloginTime = new Date().getTime();
         var diff:number = (this.eloginTime - this.sloginTime) / 1000;
@@ -103,7 +106,7 @@ export class LoginComponent implements OnInit {
 
             var page = "grid.html";
             //window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + page;
-            this._router.navigate(['Content']);
+            this._router.navigate(['Content', {acampus: o.preferredCampus, aunit: o.preferredCampus}]);
         }
         else {
 

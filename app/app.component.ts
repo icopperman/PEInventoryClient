@@ -13,6 +13,7 @@ import {Wrapper} from './content/wrapper';
 @RouteConfig([
 
     { path: '/login', name: 'Login', component: LoginComponent, useAsDefault: true }
+    ,{ path: '/content', name: 'Content', component: Wrapper }
    ,{ path: '/content', name: 'Content', component: Wrapper }
 ]
 

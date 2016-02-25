@@ -1,5 +1,6 @@
 import {Component, OnInit } from 'angular2/core';
 import {NgForm} from 'angular2/common';
+import {Router, RouteParams ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 
 
 import {lsName} from "./../../appcommon";
@@ -16,7 +17,7 @@ import {listOfUnits} from "./../sidebar/listOfUnits";
 
     selector: 'content',
     templateUrl: 'app/content/tables/content.html',
-    providers: [getDataService, getLocalDataService],
+    providers: [getDataService, getLocalDataService, ],
     directives: [listOfUnits],
     inputs: ['theUnit']
 
@@ -30,13 +31,17 @@ export class Content implements OnInit {
     loggedInUser:LocalLoginData = null;
     theUnit: Unit;
 
-    constructor(public _ls: getLocalDataService, public _ds: getDataService) {
+    constructor(public _ls: getLocalDataService,
+                public _ds: getDataService,
+                public _router: Router, public _rp: RouteParams ) {
 
         console.log('content constructor: ' + this.theUnit)
 
     }
 
     ngOnInit() {
+
+        theUnit = this._rp.get('aunit');
 
         console.log('content oninit ' + this.theUnit);
 
