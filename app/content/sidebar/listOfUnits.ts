@@ -6,7 +6,7 @@ import {lsName} from "./../../appcommon";
 import {showAlert} from "./../../appcommon";
 import {peSvcUrl} from "./../../appcommon";
 import {invokeSvc} from "./../../appcommon";
-import {Content} from './../tables/content';
+import {ContentComponent} from './../tables/content';
 import {getDataService} from "./../../getData.service";
 import {getLocalDataService} from "./../../getLocalData.service";
 import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../../interfaces";

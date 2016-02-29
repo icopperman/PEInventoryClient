@@ -1,11 +1,13 @@
 import {Injectable} from 'angular2/core';
 import {Http,  HTTP_PROVIDERS, Request, RequestMethod, RequestOptions, Headers} from 'angular2/http';
 import 'rxjs/Rx';
+import Observable = Rx.Observable;
 
 @Injectable()
 export class getDataService {
 
     constructor(public http:Http) {
+
     }
 
     getData(url:string, httpfunction:string, data:any) {

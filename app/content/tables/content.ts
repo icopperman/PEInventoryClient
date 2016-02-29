@@ -1,6 +1,6 @@
 import {Component, OnInit } from 'angular2/core';
 import {NgForm} from 'angular2/common';
-import {Router, RouteParams ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
+import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 
 
 import {lsName} from "./../../appcommon";
@@ -22,7 +22,7 @@ import {listOfUnits} from "./../sidebar/listOfUnits";
     inputs: ['theUnit']
 
 })
-export class Content implements OnInit {
+export class ContentComponent implements OnInit {
 
     prevSortColumn = "";
     currBedIdx:number;
@@ -41,7 +41,7 @@ export class Content implements OnInit {
 
     ngOnInit() {
 
-        theUnit = this._rp.get('aunit');
+        this.loggedInUser = this._ls.getLocalData(lsName);
 
         console.log('content oninit ' + this.theUnit);
 
@@ -51,14 +51,14 @@ export class Content implements OnInit {
         //$('[data-toggle="tooltip"]').tooltip();
         $('body').tooltip({selector: '[data-toggle="tooltip"]'});
 
-        this.getBedsOnUnit(this.theUnit);
+        this.getBedsOnUnit(aUnitIdx, aUnitName);
 
     }
 
-    getBedsOnUnit(theUnit: Unit) {
+    getBedsOnUnit(aUnitIdx, aUnitName) {
 
-        var preferredUnitIdx:string = theUnit.idUnit.toString();
-        var preferredUnit:string = theUnit.unitName;
+        var preferredUnitIdx:string = aUnitIdx; //theUnit.idUnit.toString();
+        var preferredUnit:string = aUnitName;//theUnit.unitName;
 
         var actEl = $(this).closest('.list-group').children('.active');
 

@@ -1,5 +1,6 @@
 import {Component, OnInit   } from 'angular2/core';
 import {NgSwitch, NgSwitchWhen, FORM_DIRECTIVES} from 'angular2/common';
+import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 
 import Dictionary = _.Dictionary;
 
@@ -11,28 +12,41 @@ import {getDataService} from "./../getData.service";
 import {getLocalDataService} from "./../getLocalData.service";
 import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../interfaces";
 import {LoginData, Unit, Units} from "./../interfaces";
-import {sidebar} from './sidebar/sidebar';
-import {Content} from './tables/content';
+import {SideBarComponent} from './sidebar/sidebar';
+import {ContentComponent} from './tables/content';
 
 @Component({
 
     selector: 'wrapper',
     templateUrl: 'app/content/wrapper.html',
     providers: [getDataService, getLocalDataService],
-    directives: [FORM_DIRECTIVES, NgSwitch, NgSwitchWhen, sidebar, Content]
+    directives: [FORM_DIRECTIVES, NgSwitch, NgSwitchWhen, SideBarComponent, ContentComponent]
 
 })
-export class Wrapper implements OnInit {
+@RouteConfig([
+
+        { path: '/', name: 'SideBar', component: SideBarComponent, useAsDefault: true }
+       , { path: '/content:id', name: 'Content', component: ContentComponent }
+
+    ]
+
+
+)
+export class WrapperComponent implements OnInit {
 
     loggedInUser:LocalLoginData = null;
 
-    constructor(public _ls:getLocalDataService, public _ds:getDataService) {
+    constructor(public _ls:getLocalDataService, public _ds:getDataService,
+                public _rp: RouteParams) {
         console.log('sidebar constructor');
 
     }
 
 
     ngOnInit() {
+
+       // let ob = this._rp.get('obs');
+
         var isLoggedIn:boolean = this.verifyLogin();
         console.log('sidebar oninit: ' + this.loggedInUser.preferredCampus);
 
