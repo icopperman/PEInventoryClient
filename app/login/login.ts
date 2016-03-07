@@ -14,8 +14,7 @@ import 'rxjs/Rx';
 import {lsName, showAlert, peSvcUrl, invokeSvc} from "../appcommon";
 import {getDataService} from "../getData.service";
 import {getLocalDataService} from "../getLocalData.service";
-import {LocalLoginData, LoginData} from "../interfaces";
-import {LoginData, Unit, Units} from "./../../interfaces";
+import {LocalLoginData, LoginData, Unit, Units} from "../interfaces";
 
 import Observable = Rx.Observable;
 
@@ -30,20 +29,19 @@ export class LoginComponent implements OnInit {
 
     sloginTime:number;
     eloginTime:number;
-    obUnits: any;
+ //   obUnits: any;
 
     constructor(
         public _ds:getDataService,
         public _ls: getLocalDataService,
         public _router: Router
     ) {
-        console.log('login component constructor');
+        console.log('login component constructor ' + lsName);
     }
 
     ngOnInit() {
-        console.log('Logincomponent oninit');
-        var url     = peSvcUrl + "units";
-        this.obUnits = this._ds.getData(url, "GET", null);
+
+        console.log('Logincomponent oninit ' + lsName);
 
     }
 
@@ -110,14 +108,11 @@ export class LoginComponent implements OnInit {
 
             lss.setLocalData(lsName, o );
 
+            this._router.navigate(['Wrapper']);
             //invokeSvc(url, "GET", null, parseAllUnitsData);
 
-            this.obUnits.subscribe(
-                data => { this.parseAllUnitsData(this._ls, this._ds,  data) },
-                err =>  { this.parseAllUnitsDataErr( err) }
-            );
 
-            this._router.navigate(['Wrapper']);
+
 
         }
         else {
@@ -156,102 +151,7 @@ export class LoginComponent implements OnInit {
 
     };
 
-    parseAllUnitsDataErr(data:Units) {
 
-        console.log(data.Status + "," + data.ErrMsg);
-
-        showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
-
-        return;
-
-    }
-
-    parseAllUnitsData(data:Units) {
-
-        if (data.Status != "ok") {
-
-            console.log(data.Status + "," + data.ErrMsg);
-
-            showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
-
-            return;
-
-        }
-
-        var allUnits:Unit[] = data.Units;
-
-        ////separate east units from west units
-        //var unitsByCampus:Dictionary<Unit[]> = _.groupBy(allUnits, function (aunit:Unit) {
-        //    return aunit.campus;
-        //});
-        //
-        //this.eunits = unitsByCampus['E'];
-        //this.wunits = unitsByCampus['W'];
-        //
-        ////it appears that properties are now preserved across asynch actions, so refresh
-        //this.loggedInUser = this._ls.getLocalData(lsName, 'parseallunitdata');
-        //
-        ////if user previously chose a campus activate it
-        //switch (this.loggedInUser.preferredCampus) {
-        //
-        //    case "W":
-        //        this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
-        //        break;
-        //
-        //    case "E":
-        //        this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
-        //        break;
-        //
-        //    default:
-        //        this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
-        //        this.loggedInUser.preferredCampus = "W";
-        //
-        //        break;
-        //}
-        //
-        ////if user previously selected a unit, go get beds on unit now
-        //if (this.loggedInUser.preferredUnit != null) {
-        //
-        //    //find index of preferred unit
-        //    var preferredUnitIdx:any = _.result(_.find(allUnits, 'unitName', this.loggedInUser.preferredUnit), 'idUnit');
-        //
-        //    //trigger click event on link to get all beds on unit
-        //    $("#u" + preferredUnitIdx).trigger('click');
-        //
-        //}
-
-    }
-
-    //activateCampus(activeListGroup:string, inactiveListGroup:string, label:string, units:Unit[]) {
-    //
-    //    $(activeListGroup).toggle(true);
-    //    $(inactiveListGroup).toggle(false);
-    //    $(label).addClass('active');
-    //    // $(inactiveListGroup).empty();
-    //    // $(activeListGroup).empty();
-    //
-    //    // this.units = units;
-    //
-    //    //var unitsList = $(activeListGroup);
-    //    //
-    //    //$.each(units, function (idx:number, aunit:Unit) {
-    //    //
-    //    //    var li = $('<li/>')
-    //    //        .addClass('list-group-item')
-    //    //        .appendTo(unitsList);
-    //    //
-    //    //    var a = $('<a/>', {
-    //    //        id: "u" + aunit.idUnit,
-    //    //        text: aunit.unitName
-    //    //        , href: "#"
-    //    //
-    //    //    });
-    //    //
-    //    //    a.bind('click', this.getBedsOnUnit).appendTo(li);
-    //    //
-    //    //});
-    //
-    //}
 
     logReady() {
 

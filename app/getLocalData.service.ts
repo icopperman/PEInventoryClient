@@ -11,7 +11,7 @@ export class getLocalDataService {
 
     getLocalData(lsName:string, caller: string): LocalLoginData {
 
-        console.log("getlocaldata: " + caller);
+        console.log("getlocaldata: " + lsName + ',' + caller);
         var xx: string = window.localStorage.getItem(lsName);
         var rtnObj: LocalLoginData = JSON.parse(xx);
         return rtnObj;

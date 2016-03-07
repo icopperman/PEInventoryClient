@@ -4,10 +4,7 @@ import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} f
 
 import Dictionary = _.Dictionary;
 
-import {lsName} from "./../../appcommon";
-import {showAlert} from "./../../appcommon";
-import {peSvcUrl} from "./../../appcommon";
-import {invokeSvc} from "./../../appcommon";
+import {lsName, invokeSvc, peSvcUrl, showAlert} from "./../../appcommon";
 import {getDataService} from "./../../getData.service";
 import {getLocalDataService} from "./../../getLocalData.service";
 import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../../interfaces";
@@ -19,25 +16,30 @@ import {listOfUnits} from './listOfUnits';
     selector: 'sidebar',
     templateUrl: 'app/content/sidebar/sidebar.html',
     providers: [getDataService, getLocalDataService],
-    directives: [FORM_DIRECTIVES, NgSwitch, NgSwitchWhen, listOfUnits],
-    outputs: ['unitSelected']
+    directives: [FORM_DIRECTIVES, NgSwitch, NgSwitchWhen, listOfUnits]
+    //,outputs: ['unitSelected']
 
 })
 export class SideBarComponent implements OnInit {
 
     loggedInUser:LocalLoginData = null;
-    unitSelected: EventEmitter<Unit> = new EventEmitter();
+  //  unitSelected: EventEmitter<Unit> = new EventEmitter();
+    eunits: Unit[] = null;
+    wunits: Unit[] = null;
+    allUnits:Unit[] = null;
 
     constructor(public _ls:getLocalDataService, public _ds:getDataService,
                     public _rp: RouteParams) {
-        console.log('sidebar constructor');
+        console.log('sidebar constructor ' + lsName);
 
     }
 
 
     ngOnInit() {
+        console.log('sidebar oninit ' + lsName);
+        this.loggedInUser = this._ls.getLocalData(lsName, 'sidebar init');
 
-        let xx = this._rp.get('obs');
+        //let xx = this._rp.get('obs');
         //var isLoggedIn:boolean = this.verifyLogin();
         //console.log('sidebar oninit: ' + this.loggedInUser.preferredCampus);
         //
@@ -56,80 +58,42 @@ export class SideBarComponent implements OnInit {
 
 
         //set focus to input field when bootstrap modal shows
-        $('#divPrompt').on('shown.bs.modal', function () {
-            $('#tabletid').focus()
-        })
+        //$('#divPrompt').on('shown.bs.modal', function () {
+        //    $('#tabletid').focus()
+        //})
 
     }
 
-
-    unitSelectedClick(aunit: Unit) {
-
-        console.log('here');
-        this.unitSelected.emit(aunit);
-    }
-
-
-    changeCampuses(campus, type) {
-
-        $("#beds").empty();
-        $("#beds1").empty();
-        $("#hdrDisNoReturn").empty();
-        $("#stats").empty();
-        $("#unitHdr").empty();
-
-        //var xx = $(this).prop('id');
-
-        switch (campus) {
-
-            case 'E':
-
-                $("#lblWest").removeClass('active');
-       //         this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
-                this.loggedInUser.preferredCampus = "E";
-                $("#campusHdr").text("East Campus");
-
-                break;
-
-            case 'W':
-
-                $("#lblEast").removeClass('active');
-    //            this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
-                this.loggedInUser.preferredCampus = "W";
-                $("#campusHdr").text("West Campus");
-                break;
-        }
-
-    }
-
-    activateCampus(activeListGroup:string, inactiveListGroup:string, label:string, units:Unit[]) {
-
-        $(activeListGroup).toggle(true);
-        $(inactiveListGroup).toggle(false);
-        $(label).addClass('active');
-        $(inactiveListGroup).empty();
-        $(activeListGroup).empty();
-
-        //var unitsList = $(activeListGroup);
-        //
-        //$.each(units, function (idx:number, aunit:Unit) {
-        //
-        //    var li = $('<li/>')
-        //        .addClass('list-group-item')
-        //        .appendTo(unitsList);
-        //
-        //    var a = $('<a/>', {
-        //        id: "u" + aunit.idUnit,
-        //        text: aunit.unitName
-        //        , href: "#"
-        //
-        //    });
-        //
-        //    a.bind('click', this.getBedsOnUnit).appendTo(li);
-        //
-        //});
-
-    }
+    //activateCampus(activeListGroup:string, inactiveListGroup:string, label:string, units:Unit[]) {
+    //
+    //    $(activeListGroup).toggle(true);
+    //    $(inactiveListGroup).toggle(false);
+    //    $(label).addClass('active');
+    //    // $(inactiveListGroup).empty();
+    //    // $(activeListGroup).empty();
+    //
+    //    // this.units = units;
+    //
+    //    //var unitsList = $(activeListGroup);
+    //    //
+    //    //$.each(units, function (idx:number, aunit:Unit) {
+    //    //
+    //    //    var li = $('<li/>')
+    //    //        .addClass('list-group-item')
+    //    //        .appendTo(unitsList);
+    //    //
+    //    //    var a = $('<a/>', {
+    //    //        id: "u" + aunit.idUnit,
+    //    //        text: aunit.unitName
+    //    //        , href: "#"
+    //    //
+    //    //    });
+    //    //
+    //    //    a.bind('click', this.getBedsOnUnit).appendTo(li);
+    //    //
+    //    //});
+    //
+    //}
 
 
 

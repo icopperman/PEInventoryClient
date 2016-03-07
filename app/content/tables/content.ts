@@ -3,10 +3,8 @@ import {NgForm} from 'angular2/common';
 import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 
 
-import {lsName} from "./../../appcommon";
-import {showAlert} from "./../../appcommon";
-import {peSvcUrl} from "./../../appcommon";
-import {invokeSvc} from "./../../appcommon";
+import {lsName, invokeSvc, peSvcUrl, showAlert} from "./../../appcommon";
+
 import {getDataService} from "./../../getData.service";
 import {getLocalDataService} from "./../../getLocalData.service";
 import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../../interfaces";
@@ -17,7 +15,7 @@ import {listOfUnits} from "./../sidebar/listOfUnits";
 
     selector: 'content',
     templateUrl: 'app/content/tables/content.html',
-    providers: [getDataService, getLocalDataService, ],
+    providers: [getDataService, getLocalDataService ],
     directives: [listOfUnits],
     inputs: ['theUnit']
 
@@ -35,13 +33,14 @@ export class ContentComponent implements OnInit {
                 public _ds: getDataService,
                 public _router: Router, public _rp: RouteParams ) {
 
-        console.log('content constructor: ' + this.theUnit)
+        console.log('content constructor: ' + this.theUnit + ',' + lsName)
 
     }
 
     ngOnInit() {
 
-        this.loggedInUser = this._ls.getLocalData(lsName);
+        this.loggedInUser = this._ls.getLocalData(lsName,'contents');
+        this.theUnit = this._rp.get('id');
 
         console.log('content oninit ' + this.theUnit);
 

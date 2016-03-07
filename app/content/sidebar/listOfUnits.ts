@@ -2,10 +2,8 @@ import {Component, OnInit, Input, Output, EventEmitter } from 'angular2/core';
 import {NgForm, NgFor} from 'angular2/common';
 import Dictionary = _.Dictionary;
 
-import {lsName} from "./../../appcommon";
-import {showAlert} from "./../../appcommon";
-import {peSvcUrl} from "./../../appcommon";
-import {invokeSvc} from "./../../appcommon";
+import {lsName, invokeSvc, peSvcUrl, showAlert} from "./../../appcommon";
+
 import {ContentComponent} from './../tables/content';
 import {getDataService} from "./../../getData.service";
 import {getLocalDataService} from "./../../getLocalData.service";
@@ -18,13 +16,17 @@ import {LoginData, Unit, Units} from "./../../interfaces";
     templateUrl: 'app/content/sidebar/listOfUnits.html',
     providers: [getDataService, getLocalDataService],
     //directives: [Content],
-    inputs: ['campus'],
-    outputs: ['unitSelected']
+   // inputs: ['campus', 'eunit', 'wunit']
+   // , outputs: ['unitSelected']
 })
 export class listOfUnits implements OnInit {
 
+    //@Input() eunits: Unit[];
+    //@Input() wunits: Unit[];
+    @Input() campus: string;
+
     loggedInUser:LocalLoginData = null;
-    campus: string;
+    //campus: string;
     units: Unit[];
     eunits:Unit[] = [];
     wunits:Unit[] = [];
@@ -33,22 +35,23 @@ export class listOfUnits implements OnInit {
 
     constructor(public _ls:getLocalDataService, public _ds: getDataService) {
 
-        console.log('listofunits constructor: ' + this.campus);
+        console.log('listofunits constructor: ' + this.campus + ',' + lsName);
     }
 
     ngOnInit() {
 
-        console.log('ListofUnits oninit: ' + this.campus);
+        console.log('ListofUnits oninit: ' + this.campus + ',' + lsName);
+        this.getAllUnits();
         //get all units from all campuses
         //get all units in all campuses
-        if (_.isEmpty(this.units) == true) {
-            this.getAllUnits();
-        }
-        else {
+        //if (_.isEmpty(this.units) == true) {
+        //    this.getAllUnits();
+        //}
+        //else {
 
-            this.units = (this.campus == "West") ? this.wunits : this.eunits;
+           // this.units = (this.campus == "West") ? this.wunits : this.eunits;
 
-        }
+        //}
     }
 //
     setSelectedUnit(aunit: Unit) {
@@ -57,6 +60,7 @@ export class listOfUnits implements OnInit {
         this.unitSelected.emit(this.selectedUnit)
 
     }
+
     getAllUnits() {
 
         console.log('getallunits start: ' + this.campus);
@@ -166,5 +170,153 @@ export class listOfUnits implements OnInit {
         //});
 
     }
+
+    //getUnitData() {
+    //
+    //    var url     = peSvcUrl + "units";
+    //    let obUnits = this._ds.getData(url, "GET", null);
+    //    obUnits.subscribe(
+    //        data => { this.parseAllUnitsData( data) },
+    //        err =>  { this.parseAllUnitsDataErr( err) }
+    //    );
+    //
+    //}
+    //
+    //parseAllUnitsDataErr(data:Units) {
+    //
+    //    console.log(data.Status + "," + data.ErrMsg);
+    //
+    //    showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
+    //
+    //    return;
+    //
+    //}
+    //
+    //parseAllUnitsData(data:Units) {
+    //
+    //    if (data.Status != "ok") {
+    //
+    //        console.log(data.Status + "," + data.ErrMsg);
+    //
+    //        showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"');
+    //
+    //        return;
+    //
+    //    }
+    //
+    //    this.allUnits = data.Units;
+    //    //   this._router.navigate(['Wrapper']);
+    //
+    //    //separate east units from west units
+    //    var unitsByCampus:Dictionary<Unit[]> = _.groupBy(this.allUnits, function (aunit:Unit) {
+    //        return aunit.campus;
+    //    });
+    //
+    //    this.eunits = unitsByCampus['E'];
+    //    this.wunits = unitsByCampus['W'];
+    //
+    //    //it appears that properties are not preserved across asynch actions, so refresh
+    //    this.loggedInUser = this._ls.getLocalData(lsName, 'parseallunitdata');
+    //
+    //    //if user previously chose a campus activate it
+    //    switch (this.loggedInUser.preferredCampus) {
+    //
+    //        case "W":
+    //            this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
+    //            break;
+    //
+    //        case "E":
+    //            this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
+    //            break;
+    //
+    //        default:
+    //            this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
+    //            this.loggedInUser.preferredCampus = "W";
+    //
+    //            break;
+    //    }
+    //
+    //    //if user previously selected a unit, go get beds on unit now
+    //    //if (this.loggedInUser.preferredUnit != null) {
+    //    //
+    //    //    //find index of preferred unit
+    //    //    var preferredUnitIdx:any = _.result(_.find(allUnits, 'unitName', this.loggedInUser.preferredUnit), 'idUnit');
+    //    //
+    //    //    //trigger click event on link to get all beds on unit
+    //    //    $("#u" + preferredUnitIdx).trigger('click');
+    //    //
+    //    //}
+    //
+    //}
+    //
+    //
+    //unitSelectedClick(aunit: Unit) {
+    //
+    //    console.log('here');
+    //    this.unitSelected.emit(aunit);
+    //}
+    //
+    //
+    //changeCampuses(campus, type) {
+    //
+    //    $("#beds").empty();
+    //    $("#beds1").empty();
+    //    $("#hdrDisNoReturn").empty();
+    //    $("#stats").empty();
+    //    $("#unitHdr").empty();
+    //
+    //    //var xx = $(this).prop('id');
+    //
+    //    switch (campus) {
+    //
+    //        case 'E':
+    //
+    //            $("#lblWest").removeClass('active');
+    //            //         this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
+    //            this.loggedInUser.preferredCampus = "E";
+    //            $("#campusHdr").text("East Campus");
+    //
+    //            break;
+    //
+    //        case 'W':
+    //
+    //            $("#lblEast").removeClass('active');
+    //            //            this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
+    //            this.loggedInUser.preferredCampus = "W";
+    //            $("#campusHdr").text("West Campus");
+    //            break;
+    //    }
+    //
+    //}
+    //
+    //activateCampus(activeListGroup:string, inactiveListGroup:string, label:string, units:Unit[]) {
+    //
+    //    $(activeListGroup).toggle(true);
+    //    $(inactiveListGroup).toggle(false);
+    //    $(label).addClass('active');
+    //    $(inactiveListGroup).empty();
+    //    $(activeListGroup).empty();
+    //
+    //    //var unitsList = $(activeListGroup);
+    //    //
+    //    //$.each(units, function (idx:number, aunit:Unit) {
+    //    //
+    //    //    var li = $('<li/>')
+    //    //        .addClass('list-group-item')
+    //    //        .appendTo(unitsList);
+    //    //
+    //    //    var a = $('<a/>', {
+    //    //        id: "u" + aunit.idUnit,
+    //    //        text: aunit.unitName
+    //    //        , href: "#"
+    //    //
+    //    //    });
+    //    //
+    //    //    a.bind('click', this.getBedsOnUnit).appendTo(li);
+    //    //
+    //    //});
+    //
+    //}
+
 
 }
