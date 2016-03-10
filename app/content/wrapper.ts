@@ -23,7 +23,7 @@ import {ContentComponent} from './tables/content';
 })
 @RouteConfig([
         { path: '/', name: 'SideBar', component: SideBarComponent, useAsDefault: true }
-       ,{ path: '/content:id', name: 'Content', component: ContentComponent }
+       ,{ path: './tables/content:id', name: 'Content', component: ContentComponent }
     ]
 )
 export class WrapperComponent implements OnInit {

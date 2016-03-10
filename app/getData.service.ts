@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Http,  HTTP_PROVIDERS, Request, RequestMethod, RequestOptions, Headers} from 'angular2/http';
 import 'rxjs/Rx';
-import Observable = Rx.Observable;
+//import Observable = Rx.Observable;
 
 @Injectable()
 export class getDataService {

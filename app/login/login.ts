@@ -16,7 +16,7 @@ import {getDataService} from "../getData.service";
 import {getLocalDataService} from "../getLocalData.service";
 import {LocalLoginData, LoginData, Unit, Units} from "../interfaces";
 
-import Observable = Rx.Observable;
+//import Observable = Rx.Observable;
 
 @Component({
 
@@ -72,7 +72,7 @@ export class LoginComponent implements OnInit {
             let obLogin  = this._ds.getData(url, "POST", auser);
             
             obLogin.subscribe(
-                    data => { this.parseLoginData(this._ls, this._ds,  data) },
+                    data => { this.parseLoginData(  data) },
                     err =>  { this.parseLoginDataErr( err) }
                 );
             //invokeSvc(url, "POST", auser, this.parseLoginData);
@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
 
     };
 
-    parseLoginData = (lss: getLocalDataService, dss: getDataService, data:LoginData) => {
+    parseLoginData = (/*lss: getLocalDataService, dss: getDataService,*/ data:LoginData) => {
 
         this.eloginTime = new Date().getTime();
         var diff:number = (this.eloginTime - this.sloginTime) / 1000;
@@ -99,14 +99,15 @@ export class LoginComponent implements OnInit {
                 idxUser: data.idxUser,
                 idxLogin: data.idxLogin,
                 isAdmin: data.isAdmin,
-                loginTime: currTime
+                loginTime: currTime,
+                allUnits: null
 
             };
 
             //var page = "grid.html";
             //window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + page;
 
-            lss.setLocalData(lsName, o );
+            this._ls.setLocalData(lsName, o );
 
             this._router.navigate(['Wrapper']);
             //invokeSvc(url, "GET", null, parseAllUnitsData);

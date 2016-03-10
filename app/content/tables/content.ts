@@ -1,4 +1,4 @@
-import {Component, OnInit } from 'angular2/core';
+import {Component, OnInit, Input } from 'angular2/core';
 import {NgForm} from 'angular2/common';
 import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 
@@ -15,9 +15,10 @@ import {listOfUnits} from "./../sidebar/listOfUnits";
 
     selector: 'content',
     templateUrl: 'app/content/tables/content.html',
-    providers: [getDataService, getLocalDataService ],
-    directives: [listOfUnits],
-    inputs: ['theUnit']
+    providers: [getDataService, getLocalDataService ]
+
+  //  ,directives: [listOfUnits],
+  //  inputs: ['theUnit']
 
 })
 export class ContentComponent implements OnInit {
@@ -27,7 +28,7 @@ export class ContentComponent implements OnInit {
     currFunc:string;
     beds:Bed[] = [];
     loggedInUser:LocalLoginData = null;
-    theUnit: Unit;
+    @Input() theUnit: Unit;
 
     constructor(public _ls: getLocalDataService,
                 public _ds: getDataService,
@@ -40,7 +41,8 @@ export class ContentComponent implements OnInit {
     ngOnInit() {
 
         this.loggedInUser = this._ls.getLocalData(lsName,'contents');
-        this.theUnit = this._rp.get('id');
+        let idx  = this._rp.get('id');
+        this.theUnit = this.loggedInUser.allUnits[idx];
 
         console.log('content oninit ' + this.theUnit);
 
@@ -50,7 +52,7 @@ export class ContentComponent implements OnInit {
         //$('[data-toggle="tooltip"]').tooltip();
         $('body').tooltip({selector: '[data-toggle="tooltip"]'});
 
-        this.getBedsOnUnit(aUnitIdx, aUnitName);
+        this.getBedsOnUnit(this.theUnit.idUnit, this.theUnit.unitName);
 
     }
 

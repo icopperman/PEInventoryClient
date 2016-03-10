@@ -23,6 +23,7 @@ export interface LocalLoginData {
     idxLogin: string;
     isAdmin: string;
     loginTime: number;
+    allUnits: Unit[];
 }
 
 export interface CheckInData {

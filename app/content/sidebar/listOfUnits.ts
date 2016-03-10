@@ -1,5 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter } from 'angular2/core';
 import {NgForm, NgFor} from 'angular2/common';
+import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
+
 import Dictionary = _.Dictionary;
 
 import {lsName, invokeSvc, peSvcUrl, showAlert} from "./../../appcommon";
@@ -24,16 +26,19 @@ export class listOfUnits implements OnInit {
     //@Input() eunits: Unit[];
     //@Input() wunits: Unit[];
     @Input() campus: string;
+    @Output() unitSelected: EventEmitter<Unit> = new EventEmitter<Unit>();
 
     loggedInUser:LocalLoginData = null;
     //campus: string;
     units: Unit[];
     eunits:Unit[] = [];
     wunits:Unit[] = [];
-    selectedUnit: Unit = null;
-    unitSelected: EventEmitter<Unit> = new EventEmitter();
+    allUnits:Unit[] = [];
+    preferredUnitIdx: number;
 
-    constructor(public _ls:getLocalDataService, public _ds: getDataService) {
+    selectedUnit: Unit = null;
+
+    constructor(public _ls:getLocalDataService, public _ds: getDataService, public _router: Router) {
 
         console.log('listofunits constructor: ' + this.campus + ',' + lsName);
     }
@@ -57,87 +62,106 @@ export class listOfUnits implements OnInit {
     setSelectedUnit(aunit: Unit) {
 
         this.selectedUnit = aunit;
-        this.unitSelected.emit(this.selectedUnit)
+        this.unitSelected.emit(aunit);
+        //this.unitSelected.emit(this.selectedUnit)
+        //this._router.navigate(['Content', {id: aunit.idUnit}])
+        //    .then(
+        //        function (data) {
+        //            console.log('here');
+        //        },
+        //        function (data) {
+        //            console.log('failr');
+        //        });
+
+
 
     }
 
-    getAllUnits() {
+    getAllUnits = () => {
 
         console.log('getallunits start: ' + this.campus);
         var url = peSvcUrl + "units";
 
         this._ds.getData(url, "GET", null)
             .subscribe(
-                (data:Units) => {
-
-                    if (data.Status != "ok") {
-
-                        console.log(data.Status + "," + data.ErrMsg);
-
-                        showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
-
-                        return;
-
-                    }
-
-                    var allUnits:Unit[] = data.Units;
-
-                    //separate east units from west units
-                    var unitsByCampus:Dictionary<Unit[]> = _.groupBy(allUnits, function (aunit:Unit) {
-                        return aunit.campus;
-                    });
-
-                    this.eunits = unitsByCampus['E'];
-                    this.wunits = unitsByCampus['W'];
-
-                    this.units = (this.campus == "West") ? this.wunits : this.eunits;
-
-                    //it appears that properties are not preserved across asynch actions, so refresh
-                    this.loggedInUser = this._ls.getLocalData(lsName, "getallunits");
-
-                    //if user previously chose a campus activate it
-                    switch (this.loggedInUser.preferredCampus) {
-
-                        case "W":
-                            this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
-                            break;
-
-                        case "E":
-                            this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
-                            break;
-
-                        default:
-                            this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
-                            this.loggedInUser.preferredCampus = "W";
-
-                            break;
-                    }
-
-                    //if user previously selected a unit, go get beds on unit now
-                    if (this.loggedInUser.preferredUnit != null) {
-
-                        //find index of preferred unit
-                        var preferredUnitIdx:any = _.result(_.find(allUnits, 'unitName', this.loggedInUser.preferredUnit), 'idUnit');
-
-                        //trigger click event on link to get all beds on unit
-                        $("#u" + preferredUnitIdx).trigger('click');
-
-                    }
-
-                }
-                ,(data:Units) => {
-
-                    console.log(data.Status + "," + data.ErrMsg);
-
-                    showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
-
-                    return;
-
-                }
+                (data:Units) => { this.parseUnitData(data) },
+                (err) => { this.parseUnitDataErr(err)}
             );
 
         //invokeSvc(url, "GET", null, this.parseAllUnitsData);
         console.log('getallunits end: ' + this.campus);
+    }
+
+    parseUnitDataErr = (err) => {
+
+        console.log(err);
+
+        showAlert("Error getting campus units:" + err, 'glyphicon-exclamation-sign"')
+
+        return;
+
+    }
+
+    parseUnitData = (data) => {
+
+        if (data.Status != "ok") {
+
+            console.log(data.Status + "," + data.ErrMsg);
+
+            showAlert("Error getting campus units:" + data.ErrMsg, 'glyphicon-exclamation-sign"')
+
+            return;
+
+        }
+
+        this.allUnits = data.Units;
+
+        //separate east units from west units
+        var unitsByCampus:Dictionary<Unit[]> = _.groupBy(this.allUnits, function (aunit:Unit) {
+            return aunit.campus;
+        });
+
+        this.eunits = unitsByCampus['E'];
+        this.wunits = unitsByCampus['W'];
+
+        this.units = (this.campus == "West") ? this.wunits : this.eunits;
+
+        //it appears that properties are not preserved across asynch actions, so refresh
+        this.loggedInUser = this._ls.getLocalData(lsName, "getallunits");
+        this.loggedInUser.allUnits = this.allUnits;
+
+        //if user previously chose a campus activate it
+        switch (this.loggedInUser.preferredCampus) {
+
+            case "W":
+                this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
+                break;
+
+            case "E":
+                this.activateCampus("#eastUnits", "#westUnits", "#lblEast", this.eunits);
+                break;
+
+            default:
+                this.activateCampus("#westUnits", "#eastUnits", "#lblWest", this.wunits);
+                this.loggedInUser.preferredCampus = "W";
+
+                break;
+        }
+
+        //if user previously selected a unit, go get beds on unit now
+        if (this.loggedInUser.preferredUnit != null) {
+
+            //find index of preferred unit
+            let xx  = _.findIndex(this.allUnits, 'unitName', this.loggedInUser.preferredUnit);;
+
+            this._router.navigate(['Content', {id: xx}]);
+            //trigger click event on link to get all beds on unit
+            //  $("#u" + preferredUnitIdx).trigger('click');
+
+
+        }
+        this._ls.setLocalData(lsName, this.loggedInUser);
+
     }
 
     activateCampus(activeListGroup:string, inactiveListGroup:string, label:string, units:Unit[]) {
