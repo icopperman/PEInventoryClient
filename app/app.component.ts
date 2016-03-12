@@ -2,7 +2,7 @@ import {Component } from 'angular2/core';
 import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 import {Http, HTTP_PROVIDERS} from 'angular2/http';
 import {LoginComponent} from "./login/login";
-import {WrapperComponent} from './content/wrapper';
+import {WrapperComponent} from './awrapper';
 
 @Component({
     selector: 'inventory-app',
@@ -13,7 +13,7 @@ import {WrapperComponent} from './content/wrapper';
 @RouteConfig([
 
     { path: '/login', name: 'Login', component: LoginComponent, useAsDefault: true }
-    ,{ path: '/wrapper/...', name: 'Wrapper', component: WrapperComponent }
+    ,{ path: '/awrapper/...', name: 'AWrapper', component: AWrapperComponent }
  //  ,{ path: '/content', name: 'Content', component: Wrapper }
 ]
 

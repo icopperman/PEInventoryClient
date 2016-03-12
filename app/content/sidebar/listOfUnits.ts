@@ -4,13 +4,13 @@ import {Router, RouteParams, RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} f
 
 import Dictionary = _.Dictionary;
 
-import {lsName, invokeSvc, peSvcUrl, showAlert} from "./../../appcommon";
+import {lsName, invokeSvc, peSvcUrl, showAlert} from "./../../Utilities/appcommon";
 
 import {ContentComponent} from './../tables/content';
-import {getDataService} from "./../../getData.service";
-import {getLocalDataService} from "./../../getLocalData.service";
-import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../../interfaces";
-import {LoginData, Unit, Units} from "./../../interfaces";
+import {getDataService} from "./../../Utilities/getData.service.ts";
+import {getLocalDataService} from "./../../Utilities/getLocalData.service.ts";
+import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./../../Utilities/interfaces";
+import {LoginData, Unit, Units} from "./../../Utilities/interfaces";
 
 @Component({
 

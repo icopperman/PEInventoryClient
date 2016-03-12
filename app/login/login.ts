@@ -11,10 +11,10 @@ import 'rxjs/Rx';
 
 //import 'bootstrap/js/bootstrap.js';
 
-import {lsName, showAlert, peSvcUrl, invokeSvc} from "../appcommon";
-import {getDataService} from "../getData.service";
-import {getLocalDataService} from "../getLocalData.service";
-import {LocalLoginData, LoginData, Unit, Units} from "../interfaces";
+import {lsName, showAlert, peSvcUrl, invokeSvc} from "../Utilities/appcommon";
+import {getDataService} from "../Utilities/getData.service.ts";
+import {getLocalDataService} from "../Utilities/getLocalData.service.ts";
+import {LocalLoginData, LoginData, Unit, Units} from "../Utilities/interfaces";
 
 //import Observable = Rx.Observable;
 
@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
 
             };
 
-            //var page = "grid.html";
+            //var page = "xgrid.html";
             //window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1) + page;
 
             this._ls.setLocalData(lsName, o );

@@ -1,6 +1,6 @@
-import {Injectable} from 'angular2/core';
-import {Http,  HTTP_PROVIDERS, Request, RequestMethod, RequestOptions, Headers} from 'angular2/http';
-import 'rxjs/Rx';
+import {Injectable} from '../../node_modules/angular2/core.d';
+import {Http,  HTTP_PROVIDERS, Request, RequestMethod, RequestOptions, Headers} from '../../node_modules/angular2/http.d';
+import '../../node_modules/rxjs/Rx.d';
 //import Observable = Rx.Observable;
 
 @Injectable()
