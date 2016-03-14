@@ -11,9 +11,9 @@ import 'rxjs/Rx';
 
 //import 'bootstrap/js/bootstrap.js';
 
-import {lsName, showAlert, peSvcUrl, invokeSvc} from "../Utilities/appcommon";
-import {getDataService} from "../Utilities/getData.service.ts";
-import {getLocalDataService} from "../Utilities/getLocalData.service.ts";
+import {lsName, showAlert, peSvcUrl, invokeSvc } from "../Utilities/appcommon";
+import {getDataService} from "../Utilities/getData.service";
+import {getLocalDataService} from "../Utilities/getLocalData.service";
 import {LocalLoginData, LoginData, Unit, Units} from "../Utilities/interfaces";
 
 //import Observable = Rx.Observable;
@@ -21,7 +21,7 @@ import {LocalLoginData, LoginData, Unit, Units} from "../Utilities/interfaces";
 @Component({
 
     selector: 'loginForm',
-    templateUrl: 'app/login/loginForm.html',
+   // templateUrl: 'app/login/loginForm.html',
     providers: [getDataService, getLocalDataService]
 
 })

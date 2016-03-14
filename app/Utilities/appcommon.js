@@ -1,4 +1,5 @@
 System.register([], function(exports_1) {
+    "use strict";
     var peSvcUrl, lsName;
     function showAlert(msg, icon, alertClass) {
         if (alertClass != null) {

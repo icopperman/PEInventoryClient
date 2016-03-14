@@ -1,4 +1,4 @@
-import {Injectable} from '../../node_modules/angular2/core.d';
+import {Injectable} from './../../node_modules/angular2/core';
 import {Bed, Beds, CheckInData, LocalLoginData, LogoffData, returnStatus} from "./interfaces";
 import {LoginData, Unit, Units} from "./interfaces";
 
